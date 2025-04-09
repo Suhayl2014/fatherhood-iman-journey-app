@@ -126,7 +126,7 @@ const Dashboard = () => {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <Card>
               <CardHeader className="p-4 sm:p-6">
                 <CardTitle className="text-base sm:text-lg">Islamic Lessons</CardTitle>
@@ -151,18 +151,6 @@ const Dashboard = () => {
               </CardContent>
             </Card>
             
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Duas Collection</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Essential prayers for parents and children</CardDescription>
-              </CardHeader>
-              <CardContent className="p-4 sm:p-6 pt-0">
-                <Button variant="outline" asChild className="w-full text-sm sm:text-base">
-                  <Link to="/duas">View Duas</Link>
-                </Button>
-              </CardContent>
-            </Card>
-            
             <Card className="bg-islamic-green/5 border-islamic-green/20">
               <CardHeader className="p-4 sm:p-6">
                 <CardTitle className="flex items-center text-base sm:text-lg">
@@ -172,8 +160,37 @@ const Dashboard = () => {
                 <CardDescription className="text-xs sm:text-sm">Islamic traditions for welcoming a new baby</CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6 pt-0">
-                <Button variant="outline" asChild className="w-full border-islamic-green/20 hover:bg-islamic-green/10 text-sm sm:text-base">
-                  <Link to="/baby-prep">View Guide</Link>
+                <Button 
+                  variant="outline" 
+                  asChild 
+                  className="w-full border-islamic-green/20 hover:bg-islamic-green/10 text-sm sm:text-base"
+                  disabled={user?.email !== "suhayl2014@outlook.com"}
+                >
+                  <Link to={user?.email === "suhayl2014@outlook.com" ? "/baby-prep" : "#"}>
+                    {user?.email === "suhayl2014@outlook.com" ? "View Guide" : "Coming Soon"}
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-islamic-teal/5 border-islamic-teal/20">
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="flex items-center text-base sm:text-lg">
+                  <UserRound className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2 text-islamic-teal" />
+                  Child Progress Tracker
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Track your child's Islamic development progress</CardDescription>
+              </CardHeader>
+              <CardContent className="p-4 sm:p-6 pt-0">
+                <Button 
+                  variant="outline" 
+                  asChild 
+                  className="w-full border-islamic-teal/20 hover:bg-islamic-teal/10 text-sm sm:text-base"
+                  disabled={children.length === 0}
+                >
+                  <Link to={children.length > 0 ? "/child-progress" : "#"}>
+                    {children.length > 0 ? "View Progress" : "Add a Child First"}
+                  </Link>
                 </Button>
               </CardContent>
             </Card>

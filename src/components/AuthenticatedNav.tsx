@@ -9,7 +9,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Heart, BookOpen, Baby, ScrollText, Users, PenTool } from 'lucide-react';
+import { Heart, BookOpen, Baby, Users } from 'lucide-react';
 
 const AuthenticatedNav = () => {
   const { signOut } = useAuth();
@@ -42,18 +42,6 @@ const AuthenticatedNav = () => {
                 <Link to="/milestones" className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-islamic-green hover:text-islamic-teal">
                   <Baby className="h-4 w-4" />
                   Milestones
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to="/duas" className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-islamic-green hover:text-islamic-teal">
-                  <ScrollText className="h-4 w-4" />
-                  Duas
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to="/journal" className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-islamic-green hover:text-islamic-teal">
-                  <PenTool className="h-4 w-4" />
-                  Journal
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>

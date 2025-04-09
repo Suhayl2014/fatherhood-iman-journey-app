@@ -23,6 +23,7 @@ const Milestones = lazy(() => import("./pages/Milestones"));
 const Community = lazy(() => import("./pages/Community"));
 const BabyPrep = lazy(() => import("./pages/BabyPrep"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const ChildProgressTracker = lazy(() => import("./pages/ChildProgressTracker"));
 
 const queryClient = new QueryClient();
 
@@ -109,6 +110,14 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
+                  <Route
+                    path="/child-progress"
+                    element={
+                      <ProtectedRoute>
+                        <ChildProgressTracker />
+                      </ProtectedRoute>
+                    }
+                  />
                   <Route path="/signout" element={<SignOut />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
@@ -124,4 +133,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, BookOpen, Heart, BookMarked, User } from 'lucide-react';
+import { Home, BookOpen, Baby, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const MobileNav = () => {
@@ -9,8 +9,7 @@ const MobileNav = () => {
   const navItems = [
     { icon: Home, label: 'Home', path: '/dashboard' },
     { icon: BookOpen, label: 'Lessons', path: '/lessons' },
-    { icon: Heart, label: 'Duas', path: '/duas' },
-    { icon: BookMarked, label: 'Journal', path: '/journal' },
+    { icon: Baby, label: 'Milestones', path: '/milestones' },
     { icon: User, label: 'Profile', path: '/profile' },
   ];
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Menu, X, BookOpen, Baby, Heart, BookMarked, Users } from "lucide-react";
+import { Menu, X, BookOpen, Baby, Heart, Users } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,8 +11,6 @@ const Header = () => {
     { name: 'Dashboard', href: '/dashboard', icon: Heart },
     { name: 'Lessons', href: '/lessons', icon: BookOpen },
     { name: 'Milestones', href: '/milestones', icon: Baby },
-    { name: 'Duas', href: '/duas', icon: BookMarked },
-    { name: 'Journal', href: '/journal', icon: BookMarked },
     { name: 'Community', href: '/community', icon: Users }
   ];
   
