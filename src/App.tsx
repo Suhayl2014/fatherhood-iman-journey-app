@@ -20,8 +20,6 @@ const Profile = lazy(() => import("./pages/Profile"));
 const Index = lazy(() => import("./pages/Index"));
 const Lessons = lazy(() => import("./pages/Lessons"));
 const Milestones = lazy(() => import("./pages/Milestones"));
-const Duas = lazy(() => import("./pages/Duas"));
-const Journal = lazy(() => import("./pages/Journal"));
 const Community = lazy(() => import("./pages/Community"));
 const BabyPrep = lazy(() => import("./pages/BabyPrep"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -56,7 +54,7 @@ function App() {
                     }
                   />
                   <Route
-                    path="/child/:id/milestones"
+                    path="/child/:id"
                     element={
                       <ProtectedRoute>
                         <ChildMilestones />
@@ -71,12 +69,38 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
-                  <Route path="/index" element={<Index />} />
-                  <Route path="/lessons" element={<Lessons />} />
-                  <Route path="/milestones" element={<Milestones />} />
-                  <Route path="/duas" element={<Duas />} />
-                  <Route path="/journal" element={<Journal />} />
-                  <Route path="/community" element={<Community />} />
+                  <Route
+                    path="/index"
+                    element={
+                      <ProtectedRoute>
+                        <Index />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/lessons"
+                    element={
+                      <ProtectedRoute>
+                        <Lessons />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/milestones"
+                    element={
+                      <ProtectedRoute>
+                        <Milestones />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/community"
+                    element={
+                      <ProtectedRoute>
+                        <Community />
+                      </ProtectedRoute>
+                    }
+                  />
                   <Route
                     path="/baby-prep"
                     element={
@@ -85,15 +109,15 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
-                  <Route path="/sign-out" element={<SignOut />} />
+                  <Route path="/signout" element={<SignOut />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
               <MobileNav />
             </div>
-            <Toaster />
-            <Sonner />
           </BrowserRouter>
+          <Toaster />
+          <Sonner />
         </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>
