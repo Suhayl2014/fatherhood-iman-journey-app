@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Lateef&family=Noto+Sans:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 142.1 76.2% 36.3%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 142.1 76.2% 36.3%;
+    --radius: 0.5rem;
+
+    /* Sidebar colors */
+    --sidebar-background: 168 38% 21%;
+    --sidebar-foreground: 46 36% 95%;
+    --sidebar-primary: 44 57% 56%;
+    --sidebar-primary-foreground: 168 38% 21%;
+    --sidebar-accent: 168 18% 30%;
+    --sidebar-accent-foreground: 46 36% 95%;
+    --sidebar-border: 174 36% 36%;
+    --sidebar-ring: 44 57% 56%;
+
+    /* Fonts */
+    --font-sans: 'Noto Sans', system-ui, sans-serif;
+    --font-decorative: 'Amiri', serif;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 142.1 70.6% 45.3%;
+    --primary-foreground: 144.9 80.4% 10%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 142.4 71.8% 29.2%;
+
+    /* Dark mode sidebar */
+    --sidebar-background: 168 38% 8%;
+    --sidebar-foreground: 46 36% 95%;
+    --sidebar-primary: 44 57% 56%;
+    --sidebar-primary-foreground: 168 38% 21%;
+    --sidebar-accent: 168 18% 25%; 
+    --sidebar-accent-foreground: 46 36% 95%;
+    --sidebar-border: 174 36% 26%;
+    --sidebar-ring: 44 57% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h1, h2, h3, h4, h5 {
+    @apply font-decorative tracking-wide;
+  }
+  
+  h1 {
+    @apply text-4xl sm:text-5xl font-bold;
+  }
+  
+  h2 {
+    @apply text-3xl sm:text-4xl font-bold;
+  }
+  
+  h3 {
+    @apply text-2xl sm:text-3xl font-bold;
+  }
+  
+  .pattern-bg {
+    background-color: #F2F0E6;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233A7D7B' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  
+  .islamic-pattern {
+    background-color: #F2F0E6;
+    background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231D4B45' fill-opacity='0.05'%3E%3Cpath d='M30 60c0 33.137 26.863 60 60 60s60-26.863 60-60-26.863-60-60-60-60 26.863-60 60zm-4 0c0 35.346 28.654 64 64 64s64-28.654 64-64-28.654-64-64-64-64 28.654-64 64zm-4 0c0 37.555 30.445 68 68 68s68-30.445 68-68-30.445-68-68-68-68 30.445-68 68zm4.9 0c0-34.784 28.316-63.1 63.1-63.1s63.1 28.316 63.1 63.1-28.316 63.1-63.1 63.1-63.1-28.316-63.1-63.1z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+}
+
+@layer components {
+  .container-app {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .nav-link {
+    @apply px-3 py-2 rounded-lg text-foreground hover:bg-accent/20 transition-colors;
+  }
+  
+  .nav-link.active {
+    @apply bg-accent/30 font-semibold;
+  }
+
+  /* Safe area insets for iOS */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Mobile-optimized spacing */
+  .mobile-spacing {
+    @apply px-4 py-3;
+  }
+
+  /* Mobile-optimized text sizes */
+  .mobile-text {
+    @apply text-base leading-relaxed;
+  }
+
+  .mobile-heading {
+    @apply text-xl font-semibold;
+  }
+
+  /* Mobile-optimized cards */
+  .mobile-card {
+    @apply rounded-lg shadow-sm p-4 mb-4;
+  }
+
+  /* Mobile-optimized buttons */
+  .mobile-button {
+    @apply w-full py-3 px-4 rounded-lg text-center font-medium;
+  }
+
+  /* Mobile-optimized navigation */
+  .mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 bg-background border-t border-border;
+  }
+
+  /* Mobile-optimized tabs */
+  .mobile-tabs {
+    @apply flex overflow-x-auto -mx-4 px-4;
+  }
+
+  .mobile-tab {
+    @apply flex-none px-4 py-2 text-sm font-medium;
+  }
+}
+
+/* Prevent text selection on mobile */
+.no-select {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent pull-to-refresh on mobile */
+body {
+  overscroll-behavior-y: none;
+}
+
+/* Optimize touch targets */
+button, a, input, select, textarea {
+  @apply min-h-[44px] min-w-[44px];
+}
+
+/* Optimize font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
