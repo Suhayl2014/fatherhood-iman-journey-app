@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -39,32 +38,19 @@ const Index = () => {
   const features = [
     {
       title: "Islamic Lessons",
-      description: "Guidance on Islamic parenting principles and practices.",
+      description: "Learn essential Islamic knowledge for fathers through interactive lessons.",
       icon: BookOpen,
       linkTo: "/lessons"
     },
     {
       title: "Child Milestones",
-      description: "Track your child's development with Islamic perspective.",
+      description: "Track your child's development with age-appropriate Islamic milestones.",
       icon: Baby,
       linkTo: "/milestones"
     },
     {
-      title: "Baby Preparation",
-      description: "Islamic traditions for welcoming your newborn.",
-      icon: Heart,
-      linkTo: "/babyprep",
-      highlight: true
-    },
-    {
-      title: "Duas Collection",
-      description: "Essential prayers for Muslim fathers and children.",
-      icon: BookMarked,
-      linkTo: "/duas"
-    },
-    {
-      title: "Fatherhood Community",
-      description: "Connect with other Muslim fathers on similar journeys.",
+      title: "Community",
+      description: "Connect with other Muslim fathers and share experiences.",
       icon: Users,
       linkTo: "/community"
     }
@@ -148,7 +134,6 @@ const Index = () => {
                   description={feature.description}
                   icon={feature.icon}
                   linkTo={feature.linkTo}
-                  highlight={feature.highlight}
                 />
               ))}
             </div>

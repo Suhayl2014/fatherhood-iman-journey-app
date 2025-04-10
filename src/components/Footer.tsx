@@ -12,7 +12,7 @@ const Footer = () => {
                 <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-islamic-cream" />
               </div>
               <div>
-                <h3 className="text-lg sm:text-xl font-bold text-islamic-green">Iman Journey</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-islamic-green">Fatherhood Journey</h3>
                 <p className="text-xs text-islamic-teal">For Muslim Fathers</p>
               </div>
             </Link>
@@ -24,10 +24,8 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-islamic-green mb-3 sm:mb-4 text-sm sm:text-base">Features</h4>
             <ul className="space-y-1.5 sm:space-y-2">
-              <li><Link to="/lessons" className="text-xs sm:text-sm hover:text-islamic-teal">Parenting Lessons</Link></li>
+              <li><Link to="/lessons" className="text-xs sm:text-sm hover:text-islamic-teal">Islamic Lessons</Link></li>
               <li><Link to="/milestones" className="text-xs sm:text-sm hover:text-islamic-teal">Child Milestones</Link></li>
-              <li><Link to="/duas" className="text-xs sm:text-sm hover:text-islamic-teal">Duas Collection</Link></li>
-              <li><Link to="/journal" className="text-xs sm:text-sm hover:text-islamic-teal">Journal</Link></li>
               <li><Link to="/community" className="text-xs sm:text-sm hover:text-islamic-teal">Community</Link></li>
             </ul>
           </div>
@@ -55,7 +53,7 @@ const Footer = () => {
         
         <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-islamic-sand/30 text-center">
           <p className="text-xs sm:text-sm text-islamic-green/60">
-            &copy; {new Date().getFullYear()} Iman Journey. All rights reserved.
+            &copy; {new Date().getFullYear()} Fatherhood Journey. All rights reserved.
           </p>
         </div>
       </div>

@@ -101,7 +101,7 @@ const Auth = () => {
                 <Heart className="h-5 w-5 text-islamic-cream" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-islamic-green">Iman Journey</h1>
+                <h1 className="text-xl font-bold text-islamic-green">Fatherhood Journey</h1>
                 <p className="text-xs text-islamic-teal">For Muslim Fathers</p>
               </div>
             </Link>
@@ -228,7 +228,7 @@ const Auth = () => {
       {/* Footer */}
       <footer className="bg-white py-4 border-t">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} Iman Journey. All rights reserved.
+          © {new Date().getFullYear()} Fatherhood Journey. All rights reserved.
         </div>
       </footer>
     </div>
