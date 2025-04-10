@@ -12,15 +12,20 @@ const Landing = () => {
   const waitlistRef = useRef<HTMLDivElement>(null);
 
   const scrollToWaitlist = () => {
+    // First scroll to the waitlist section
     waitlistRef.current?.scrollIntoView({ behavior: 'smooth' });
-    // Add a highlight effect to the email input
-    const emailInput = waitlistRef.current?.querySelector('input[type="email"]');
-    if (emailInput) {
-      emailInput.classList.add('ring-2', 'ring-islamic-green', 'ring-offset-2');
-      setTimeout(() => {
-        emailInput.classList.remove('ring-2', 'ring-islamic-green', 'ring-offset-2');
-      }, 2000);
-    }
+    
+    // Then focus on the email input after a short delay
+    setTimeout(() => {
+      const emailInput = document.querySelector('input[type="email"]') as HTMLInputElement;
+      if (emailInput) {
+        emailInput.focus();
+        emailInput.classList.add('ring-2', 'ring-islamic-green', 'ring-offset-2');
+        setTimeout(() => {
+          emailInput.classList.remove('ring-2', 'ring-islamic-green', 'ring-offset-2');
+        }, 2000);
+      }
+    }, 500);
   };
 
   return (
@@ -33,11 +38,11 @@ const Landing = () => {
           <div className="container-app">
             <div className="flex items-center justify-between py-4">
               <div className="flex items-center">
-                <Link to="/" className="flex items-center gap-2">
+                <Link to="/auth" className="flex items-center gap-2">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-islamic-green to-islamic-teal flex items-center justify-center shadow-md">
                     <div className="relative">
                       <Heart className="h-6 w-6 text-white" />
-                      <Star className="h-3 w-3 text-islamic-gold absolute -top-1 -right-1" />
+                      <Shield className="h-3 w-3 text-islamic-gold absolute -top-1 -right-1" />
                     </div>
                   </div>
                   <div>
@@ -45,15 +50,6 @@ const Landing = () => {
                     <p className="text-xs text-islamic-teal">Empowering fathers with faith</p>
                   </div>
                 </Link>
-              </div>
-              
-              <div className="flex space-x-2">
-                <Button variant="outline" asChild>
-                  <Link to="/auth?mode=signin">Sign In</Link>
-                </Button>
-                <Button asChild>
-                  <Link to="/auth?mode=signup">Register</Link>
-                </Button>
               </div>
             </div>
           </div>
@@ -80,13 +76,6 @@ const Landing = () => {
                         onClick={scrollToWaitlist}
                       >
                         Start Your Journey
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="border-islamic-sand text-islamic-sand hover:bg-islamic-sand/10"
-                        onClick={() => setIsHero1Visible(false)}
-                      >
-                        Learn More
                       </Button>
                     </div>
                   </div>
@@ -120,9 +109,9 @@ const Landing = () => {
                     <div className="flex flex-col sm:flex-row gap-4">
                       <Button 
                         className="bg-islamic-gold hover:bg-islamic-gold/90 text-islamic-blue"
-                        asChild
+                        onClick={scrollToWaitlist}
                       >
-                        <Link to="/auth?mode=signup">Register Now</Link>
+                        Start Your Journey
                       </Button>
                       <Button 
                         variant="outline" 
@@ -156,7 +145,7 @@ const Landing = () => {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 bg-white">
+        <section id="features-section" className="py-16 bg-white">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4 text-islamic-green">Features Designed for Modern Muslim Dads</h2>
@@ -196,45 +185,14 @@ const Landing = () => {
         </section>
 
         {/* Waitlist Section */}
-        <section ref={waitlistRef} className="py-16 bg-gradient-to-br from-islamic-green/5 to-islamic-teal/5">
+        <section ref={waitlistRef} className="py-16 bg-gradient-to-r from-islamic-green to-islamic-teal text-white">
           <div className="container mx-auto px-4 max-w-6xl text-center">
             <div className="max-w-2xl mx-auto">
-              <h2 className="text-3xl font-bold mb-4 text-islamic-green">Join Our Exclusive Waitlist</h2>
-              <p className="text-lg text-gray-600 mb-8">
+              <h2 className="text-3xl font-bold mb-4">Join Our Exclusive Waitlist</h2>
+              <p className="text-lg text-islamic-sand mb-8">
                 Be among the first to experience Fatherhood Iman Journey when we launch. Get early access and special benefits.
               </p>
               <WaitlistForm />
-            </div>
-          </div>
-        </section>
-
-        {/* Call to Action */}
-        <section className="py-16 bg-gradient-to-r from-islamic-green to-islamic-teal text-white text-center">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="w-16 h-16 mx-auto mb-6 bg-white rounded-full flex items-center justify-center">
-              <div className="relative">
-                <Heart className="h-8 w-8 text-islamic-green" />
-                <Star className="h-4 w-4 text-islamic-gold absolute -top-1 -right-1" />
-              </div>
-            </div>
-            <h2 className="text-3xl font-bold mb-4">Join The Modern Muslim Dad Today</h2>
-            <p className="max-w-2xl mx-auto mb-8 text-islamic-sand">
-              Join thousands of Muslim fathers growing spiritually while nurturing their families with confidence and purpose.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                className="bg-islamic-gold hover:bg-islamic-gold/90 text-islamic-green text-lg px-8 py-6 h-auto"
-                asChild
-              >
-                <Link to="/auth?mode=signup">Register Now</Link>
-              </Button>
-              <Button
-                variant="outline"
-                className="border-islamic-sand text-islamic-sand hover:bg-islamic-sand/10 text-lg px-8 py-6 h-auto"
-                asChild
-              >
-                <Link to="/auth?mode=signin">Sign In</Link>
-              </Button>
             </div>
           </div>
         </section>
