@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Mail } from "lucide-react";
+import { supabase } from '@/integrations/supabase/client';
 
 export function WaitlistForm() {
   const [email, setEmail] = useState('');
@@ -14,12 +15,35 @@ export function WaitlistForm() {
     setIsLoading(true);
 
     try {
-      // Here you would typically make an API call to your backend
-      // For now, we'll simulate the API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Check if email already exists
+      const { data: existingEntry } = await supabase
+        .from('waitlist')
+        .select('email')
+        .eq('email', email)
+        .single();
+
+      if (existingEntry) {
+        toast({
+          title: "You're already on our waitlist!",
+          description: "We'll notify you when we launch.",
+          duration: 5000,
+        });
+        setEmail('');
+        return;
+      }
+
+      // Add email to waitlist
+      const { error } = await supabase
+        .from('waitlist')
+        .insert([
+          { 
+            email,
+            status: 'pending'
+          }
+        ]);
+
+      if (error) throw error;
       
-      // Send thank you email (this would be handled by your backend)
-      // For now, we'll just show a success message
       toast({
         title: "Thank you for joining our waitlist!",
         description: "We've sent you a confirmation email with more details.",
@@ -28,6 +52,7 @@ export function WaitlistForm() {
       
       setEmail('');
     } catch (error) {
+      console.error('Error adding to waitlist:', error);
       toast({
         title: "Something went wrong",
         description: "Please try again later.",

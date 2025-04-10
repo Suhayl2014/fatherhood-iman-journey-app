@@ -39,6 +39,13 @@ export interface LessonProgress {
   updatedAt: string;
 }
 
+export interface WaitlistEntry {
+  id: string;
+  created_at: string;
+  email: string;
+  status: 'pending' | 'contacted' | 'registered';
+}
+
 // Define the Database interface to properly type Supabase client operations
 export interface Database {
   public: {
@@ -97,6 +104,21 @@ export interface Database {
           milestone_id?: string;
           completed_date?: string;
           notes?: string | null;
+          created_at?: string;
+        };
+      };
+      waitlist: {
+        Row: WaitlistEntry;
+        Insert: {
+          id?: string;
+          email: string;
+          status?: 'pending' | 'contacted' | 'registered';
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          status?: 'pending' | 'contacted' | 'registered';
           created_at?: string;
         };
       };
