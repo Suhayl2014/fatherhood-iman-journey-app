@@ -9,7 +9,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Heart, BookOpen, Baby, Users } from 'lucide-react';
+import { BookOpen, Baby, Users, Shield, Star } from 'lucide-react';
 
 const AuthenticatedNav = () => {
   const { signOut } = useAuth();
@@ -20,12 +20,15 @@ const AuthenticatedNav = () => {
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-islamic-green flex items-center justify-center">
-                <Heart className="h-5 w-5 text-islamic-cream" />
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-islamic-green to-islamic-teal flex items-center justify-center shadow-md">
+                <div className="relative">
+                  <Shield className="h-5 w-5 text-white" />
+                  <Star className="h-2.5 w-2.5 text-islamic-gold absolute -top-0.5 -right-0.5" />
+                </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-islamic-green">Iman Journey</h1>
-                <p className="text-xs text-islamic-teal">For Muslim Fathers</p>
+                <h1 className="text-xl font-bold text-islamic-green">The Modern Muslim Dad</h1>
+                <p className="text-xs text-islamic-teal">Empowering fathers with faith</p>
               </div>
             </Link>
           </div>

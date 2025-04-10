@@ -504,19 +504,19 @@ const ChildProgressTracker = () => {
             </div>
           </div>
           
-          {/* Timeline */}
+          {/* Timeline - Mobile Optimized */}
           <div className="relative">
             {/* Timeline line */}
             <div className="absolute top-4 left-0 right-0 h-0.5 bg-gray-200"></div>
             
-            {/* Timeline stages */}
-            <div className="flex justify-between relative">
+            {/* Timeline stages - Mobile scrollable */}
+            <div className="flex overflow-x-auto pb-4 -mx-4 px-4 md:justify-between md:overflow-visible md:mx-0 md:px-0">
               {islamicStages.map((stage, index) => {
                 const isActive = index <= currentStageIndex;
                 const isCurrent = index === currentStageIndex;
                 
                 return (
-                  <div key={stage.name} className="relative flex flex-col items-center">
+                  <div key={stage.name} className="relative flex flex-col items-center min-w-[120px] md:min-w-0">
                     {/* Stage marker */}
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${
                       isActive ? 'bg-islamic-green text-white' : 'bg-gray-200 text-gray-400'
@@ -525,7 +525,7 @@ const ChildProgressTracker = () => {
                     </div>
                     
                     {/* Stage content */}
-                    <div className={`p-3 rounded-lg border text-center w-32 ${
+                    <div className={`p-3 rounded-lg border text-center w-full md:w-32 ${
                       isCurrent ? 'border-islamic-green bg-islamic-green/5' : 'border-gray-200'
                     }`}>
                       <h4 className={`font-medium text-sm ${isCurrent ? 'text-islamic-green' : ''}`}>
@@ -544,34 +544,34 @@ const ChildProgressTracker = () => {
     );
   };
 
-  // Update the milestone card rendering
+  // Update the milestone card rendering for mobile
   const renderMilestoneCard = (milestone: Milestone) => (
     <Card key={milestone.id} className="mb-4">
-      <CardHeader>
-        <CardTitle className="text-lg">{milestone.title}</CardTitle>
-        <CardDescription>
+      <CardHeader className="p-4">
+        <CardTitle className="text-base md:text-lg">{milestone.title}</CardTitle>
+        <CardDescription className="text-xs md:text-sm">
           Age: {milestone.age} months • Due: {new Date(milestone.dueDate).toLocaleDateString()}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 pt-0">
         <p className="text-sm text-muted-foreground mb-4">{milestone.description}</p>
-        <div className="flex justify-between items-center">
-          <Badge variant="outline">{milestone.category}</Badge>
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+          <Badge variant="outline" className="w-fit">{milestone.category}</Badge>
           {milestone.status === 'upcoming' ? (
             <Button
               variant="outline"
               size="sm"
               onClick={() => markMilestoneCompleted(milestone.id.toString())}
-              className="text-xs transition-all duration-300"
+              className="text-xs transition-all duration-300 w-full sm:w-auto"
             >
               Mark Complete
             </Button>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <Button
                 variant="default"
                 size="sm"
-                className="text-xs bg-islamic-green hover:bg-islamic-green/90"
+                className="text-xs bg-islamic-green hover:bg-islamic-green/90 w-full sm:w-auto"
               >
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4" />
@@ -587,7 +587,7 @@ const ChildProgressTracker = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => markMilestoneIncomplete(milestone.id.toString())}
-                className="text-xs text-red-500 hover:text-red-600"
+                className="text-xs text-red-500 hover:text-red-600 w-full sm:w-auto"
               >
                 Undo
               </Button>
@@ -609,19 +609,19 @@ const ChildProgressTracker = () => {
           </div>
 
           <div className="flex flex-col md:flex-row gap-8">
-            {/* Left sidebar */}
+            {/* Left sidebar - Mobile optimized */}
             <div className="w-full md:w-64 space-y-4">
               <Card>
-                <CardHeader>
-                  <CardTitle>Children</CardTitle>
+                <CardHeader className="p-4">
+                  <CardTitle className="text-base md:text-lg">Children</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-4 pt-0">
                   <div className="space-y-2">
                     {children.map((child) => (
                       <Button
                         key={child.id}
                         variant={selectedChild?.id === child.id ? "default" : "ghost"}
-                        className="w-full justify-start"
+                        className="w-full justify-start text-sm md:text-base"
                         onClick={() => setSelectedChild(child)}
                       >
                         <User className="w-4 h-4 mr-2" />
@@ -630,7 +630,7 @@ const ChildProgressTracker = () => {
                     ))}
                     <Button
                       variant="outline"
-                      className="w-full justify-start"
+                      className="w-full justify-start text-sm md:text-base"
                       onClick={() => navigate('/add-child')}
                     >
                       <Plus className="w-4 h-4 mr-2" />
@@ -641,21 +641,21 @@ const ChildProgressTracker = () => {
               </Card>
             </div>
 
-            {/* Main content */}
+            {/* Main content - Mobile optimized */}
             <div className="flex-1">
               {selectedChild ? (
                 <>
                   <div className="mb-6">
-                    <h1 className="text-3xl font-bold">{selectedChild.name}'s Progress</h1>
-                    <p className="text-muted-foreground">
+                    <h1 className="text-2xl md:text-3xl font-bold">{selectedChild.name}'s Progress</h1>
+                    <p className="text-muted-foreground text-sm md:text-base">
                       Age: {getChildAge(selectedChild.id)}
                     </p>
                   </div>
 
                   <Tabs defaultValue="overview" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="overview">Milestones Completed</TabsTrigger>
-                      <TabsTrigger value="milestones">Upcoming Milestones</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-2 mb-4">
+                      <TabsTrigger value="overview" className="text-sm md:text-base">Upcoming Milestones</TabsTrigger>
+                      <TabsTrigger value="milestones" className="text-sm md:text-base">Milestones Completed</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="overview" className="space-y-4">
@@ -664,11 +664,11 @@ const ChildProgressTracker = () => {
                       
                       {/* Upcoming Milestones */}
                       <Card>
-                        <CardHeader>
-                          <CardTitle>Upcoming Islamic Milestones</CardTitle>
-                          <CardDescription>Track your child's next Islamic achievements</CardDescription>
+                        <CardHeader className="p-4">
+                          <CardTitle className="text-base md:text-lg">Upcoming Islamic Milestones</CardTitle>
+                          <CardDescription className="text-xs md:text-sm">Track your child's next Islamic achievements</CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="p-4 pt-0">
                           <div className="space-y-6">
                             {milestones
                               .filter(m => m.status === 'upcoming')
@@ -681,11 +681,11 @@ const ChildProgressTracker = () => {
 
                     <TabsContent value="milestones" className="space-y-4">
                       <Card>
-                        <CardHeader>
-                          <CardTitle>Milestones Completed</CardTitle>
-                          <CardDescription>Celebrate your child's Islamic achievements</CardDescription>
+                        <CardHeader className="p-4">
+                          <CardTitle className="text-base md:text-lg">Milestones Completed</CardTitle>
+                          <CardDescription className="text-xs md:text-sm">Celebrate your child's Islamic achievements</CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="p-4 pt-0">
                           <div className="space-y-6">
                             {milestones
                               .filter(m => m.status === 'completed')
@@ -720,8 +720,8 @@ const ChildProgressTracker = () => {
         <div className="fixed inset-0 pointer-events-none z-50">
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <h2 className="text-3xl font-bold text-islamic-green mb-2">MashaAllah!</h2>
-              <p className="text-xl text-gray-700">Great achievement!</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-islamic-green mb-2">MashaAllah!</h2>
+              <p className="text-lg md:text-xl text-gray-700">Great achievement!</p>
             </div>
           </div>
         </div>

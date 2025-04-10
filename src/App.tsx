@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
@@ -28,6 +28,10 @@ const ChildProgressTracker = lazy(() => import("./pages/ChildProgressTracker"));
 const queryClient = new QueryClient();
 
 function App() {
+  useEffect(() => {
+    document.title = "The Modern Muslim Dad";
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

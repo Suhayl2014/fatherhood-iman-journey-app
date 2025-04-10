@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -41,76 +40,67 @@ const Milestones = () => {
     <div className="flex flex-col min-h-screen">
       <Header />
       
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="bg-islamic-blue text-white py-12">
-          <div className="container-app">
-            <div className="flex items-center justify-center mb-6">
-              <Baby className="h-12 w-12 mr-4" />
-              <h1 className="text-3xl md:text-4xl font-bold">Child Development Milestones</h1>
-            </div>
-            <p className="text-center max-w-2xl mx-auto">
-              Track your child's development through key stages with guidance from Islamic perspective and practical tips for fathers.
-            </p>
+      <main className="flex-grow py-4 sm:py-8">
+        <div className="container-app px-4 sm:px-6">
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-islamic-green">Islamic Development Milestones</h1>
+            <p className="mt-1 sm:mt-2 text-gray-600">Track your child's growth through key Islamic and developmental stages</p>
           </div>
-        </section>
-        
-        {/* Age Range Tabs */}
-        <section className="py-8 bg-gray-50">
-          <div className="container-app">
-            <Tabs defaultValue="all" onValueChange={setSelectedAge} className="w-full">
-              <div className="flex justify-center">
-                <TabsList className="mb-8">
-                  <TabsTrigger value="all">All Ages</TabsTrigger>
-                  {ageRanges.map(ageRange => (
-                    <TabsTrigger key={ageRange} value={ageRange}>{ageRange}</TabsTrigger>
-                  ))}
-                </TabsList>
-              </div>
-              
-              <TabsContent value="all" className="mt-0">
-                <div className="space-y-12">
-                  {Object.entries(groupedMilestones).map(([ageRange, milestones]) => (
-                    <div key={ageRange}>
-                      <h2 className="text-2xl font-bold mb-6 text-islamic-green border-b pb-2">
-                        {ageRange}
-                      </h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {milestones.map((milestone) => (
-                          <MilestoneCard 
-                            key={milestone.id} 
-                            milestone={milestone}
-                            Icon={categoryIcons[milestone.category]}
-                          />
-                        ))}
-                      </div>
+
+          <Tabs defaultValue="all" onValueChange={setSelectedAge} className="w-full">
+            <div className="flex justify-center overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+              <TabsList className="mb-6 sm:mb-8">
+                <TabsTrigger value="all" className="text-sm sm:text-base">All Ages</TabsTrigger>
+                {ageRanges.map(ageRange => (
+                  <TabsTrigger key={ageRange} value={ageRange} className="text-sm sm:text-base">
+                    {ageRange}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
+            
+            <TabsContent value="all" className="mt-0">
+              <div className="space-y-8 sm:space-y-12">
+                {Object.entries(groupedMilestones).map(([ageRange, milestones]) => (
+                  <div key={ageRange}>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-islamic-green border-b pb-2">
+                      {ageRange}
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                      {milestones.map((milestone) => (
+                        <MilestoneCard 
+                          key={milestone.id} 
+                          milestone={milestone}
+                          Icon={categoryIcons[milestone.category]}
+                        />
+                      ))}
                     </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+            
+            {ageRanges.map(ageRange => (
+              <TabsContent key={ageRange} value={ageRange} className="mt-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                  {groupedMilestones[ageRange]?.map((milestone) => (
+                    <MilestoneCard 
+                      key={milestone.id} 
+                      milestone={milestone} 
+                      Icon={categoryIcons[milestone.category]}
+                    />
                   ))}
                 </div>
               </TabsContent>
-              
-              {ageRanges.map(ageRange => (
-                <TabsContent key={ageRange} value={ageRange} className="mt-0">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {groupedMilestones[ageRange]?.map((milestone) => (
-                      <MilestoneCard 
-                        key={milestone.id} 
-                        milestone={milestone} 
-                        Icon={categoryIcons[milestone.category]}
-                      />
-                    ))}
-                  </div>
-                </TabsContent>
-              ))}
-            </Tabs>
-          </div>
-        </section>
+            ))}
+          </Tabs>
+        </div>
         
         {/* Development Categories Explanation */}
-        <section className="py-12 bg-white">
-          <div className="container-app">
-            <h2 className="text-2xl font-bold mb-8 text-islamic-green">Development Categories</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <section className="py-8 sm:py-12 bg-white mt-8 sm:mt-12">
+          <div className="container-app px-4 sm:px-6">
+            <h2 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-islamic-green">Development Categories</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <Card>
                 <CardHeader className="pb-2">
                   <div className="w-10 h-10 rounded-full bg-islamic-green/10 flex items-center justify-center mb-2">
@@ -119,7 +109,7 @@ const Milestones = () => {
                   <CardTitle className="text-islamic-green">Physical</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>Movement, motor skills, physical growth and coordination development.</p>
+                  <p className="text-sm sm:text-base">Motor skills, coordination, and physical abilities.</p>
                 </CardContent>
               </Card>
               
@@ -131,7 +121,7 @@ const Milestones = () => {
                   <CardTitle className="text-islamic-blue">Cognitive</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>Learning, thinking, problem-solving, language and memory development.</p>
+                  <p className="text-sm sm:text-base">Learning, problem-solving, and mental development.</p>
                 </CardContent>
               </Card>
               
@@ -143,7 +133,7 @@ const Milestones = () => {
                   <CardTitle className="text-islamic-teal">Social</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>Interacting with others, forming relationships, and developing social skills.</p>
+                  <p className="text-sm sm:text-base">Interaction with others, communication, and relationships.</p>
                 </CardContent>
               </Card>
               
@@ -155,7 +145,7 @@ const Milestones = () => {
                   <CardTitle className="text-red-500">Emotional</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>Expressing feelings, recognizing emotions, and developing empathy.</p>
+                  <p className="text-sm sm:text-base">Expressing feelings, recognizing emotions, and developing empathy.</p>
                 </CardContent>
               </Card>
               
@@ -167,7 +157,7 @@ const Milestones = () => {
                   <CardTitle className="text-islamic-gold">Spiritual</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>Connection to faith, developing Islamic identity, and understanding of Allah.</p>
+                  <p className="text-sm sm:text-base">Connection to faith, developing Islamic identity, and understanding of Allah.</p>
                 </CardContent>
               </Card>
             </div>
@@ -210,31 +200,31 @@ const MilestoneCard = ({ milestone, Icon }: { milestone: Milestone; Icon: React.
 
   return (
     <Card className="overflow-hidden card-hover h-full flex flex-col">
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-2 p-4">
         <Badge className={`${getBgColor()} ${getTextColor()} border-none mb-2`}>
           {milestone.category.charAt(0).toUpperCase() + milestone.category.slice(1)}
         </Badge>
-        <CardTitle className={getTextColor()}>{milestone.title}</CardTitle>
-        <CardDescription>{milestone.description}</CardDescription>
+        <CardTitle className={`${getTextColor()} text-base sm:text-lg`}>{milestone.title}</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">{milestone.description}</CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow">
+      <CardContent className="flex-grow p-4 pt-0">
         <div className="mb-4 mt-2">
-          <h4 className="font-semibold text-gray-700 mb-2">Islamic Perspective:</h4>
-          <p className="text-gray-600">{milestone.islamicPerspective}</p>
+          <h4 className="font-semibold text-gray-700 text-sm sm:text-base mb-2">Islamic Perspective:</h4>
+          <p className="text-gray-600 text-sm">{milestone.islamicPerspective}</p>
         </div>
         
         {showTips && (
           <div className="mt-4">
-            <h4 className="font-semibold text-gray-700 mb-2">Tips for Fathers:</h4>
+            <h4 className="font-semibold text-gray-700 text-sm sm:text-base mb-2">Tips for Fathers:</h4>
             <ul className="list-disc pl-5 space-y-1">
               {milestone.tips.map((tip, index) => (
-                <li key={index} className="text-gray-600">{tip}</li>
+                <li key={index} className="text-gray-600 text-sm">{tip}</li>
               ))}
             </ul>
           </div>
         )}
       </CardContent>
-      <CardFooter>
+      <CardFooter className="p-4 pt-0">
         <button 
           onClick={() => setShowTips(!showTips)}
           className={`text-sm font-medium ${getTextColor()} hover:underline`}

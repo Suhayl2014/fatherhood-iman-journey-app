@@ -1,20 +1,25 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, BookOpen, Baby, User } from 'lucide-react';
+import { Shield, BookOpen, Baby, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const MobileNav = () => {
   const location = useLocation();
   
+  // Don't show mobile nav on landing page
+  if (location.pathname === '/') {
+    return null;
+  }
+  
   const navItems = [
-    { icon: Home, label: 'Home', path: '/dashboard' },
+    { icon: Shield, label: 'Home', path: '/dashboard' },
     { icon: BookOpen, label: 'Lessons', path: '/lessons' },
     { icon: Baby, label: 'Milestones', path: '/milestones' },
-    { icon: User, label: 'Profile', path: '/profile' },
+    { icon: Users, label: 'Community', path: '/community' },
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden safe-bottom">
       <div className="flex justify-around items-center h-16">
         {navItems.map((item) => {
           const Icon = item.icon;

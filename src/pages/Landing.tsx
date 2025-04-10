@@ -1,13 +1,27 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Baby, BookOpen, CheckCircle } from 'lucide-react';
+import { Heart, Baby, BookOpen, CheckCircle, Star, Crown, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import useAuth from '../context/AuthContext';
 import AuthenticatedNav from '@/components/AuthenticatedNav';
+import { WaitlistForm } from "@/components/WaitlistForm";
 
 const Landing = () => {
   const [isHero1Visible, setIsHero1Visible] = useState(true);
   const { user } = useAuth();
+  const waitlistRef = useRef<HTMLDivElement>(null);
+
+  const scrollToWaitlist = () => {
+    waitlistRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Add a highlight effect to the email input
+    const emailInput = waitlistRef.current?.querySelector('input[type="email"]');
+    if (emailInput) {
+      emailInput.classList.add('ring-2', 'ring-islamic-green', 'ring-offset-2');
+      setTimeout(() => {
+        emailInput.classList.remove('ring-2', 'ring-islamic-green', 'ring-offset-2');
+      }, 2000);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -20,12 +34,15 @@ const Landing = () => {
             <div className="flex items-center justify-between py-4">
               <div className="flex items-center">
                 <Link to="/" className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full bg-islamic-green flex items-center justify-center">
-                    <Heart className="h-5 w-5 text-islamic-cream" />
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-islamic-green to-islamic-teal flex items-center justify-center shadow-md">
+                    <div className="relative">
+                      <Shield className="h-6 w-6 text-white" />
+                      <Star className="h-3 w-3 text-islamic-gold absolute -top-1 -right-1" />
+                    </div>
                   </div>
                   <div>
-                    <h1 className="text-xl font-bold text-islamic-green">Iman Journey</h1>
-                    <p className="text-xs text-islamic-teal">For Muslim Fathers</p>
+                    <h1 className="text-xl font-bold text-islamic-green">The Modern Muslim Dad</h1>
+                    <p className="text-xs text-islamic-teal">Empowering fathers with faith</p>
                   </div>
                 </Link>
               </div>
@@ -47,12 +64,12 @@ const Landing = () => {
         {/* Hero Section */}
         <section className="relative overflow-hidden">
           <div className={`transition-opacity duration-500 ${isHero1Visible ? 'opacity-100' : 'opacity-0'}`}>
-            <div className="bg-islamic-green text-white py-20">
+            <div className="bg-gradient-to-r from-islamic-green to-islamic-teal text-white py-20">
               <div className="container mx-auto px-4 max-w-6xl">
                 <div className="flex flex-col md:flex-row md:items-center">
                   <div className="md:w-1/2 mb-8 md:mb-0">
                     <h2 className="text-4xl md:text-5xl font-bold mb-4 font-decorative">
-                      Your Iman Journey as a Father
+                      The Modern Muslim Dad
                     </h2>
                     <p className="text-xl mb-6 text-islamic-sand">
                       Islamic guidance and practical tools for Muslim fathers navigating parenthood with faith and purpose.
@@ -60,9 +77,9 @@ const Landing = () => {
                     <div className="flex flex-col sm:flex-row gap-4">
                       <Button 
                         className="bg-islamic-gold hover:bg-islamic-gold/90 text-islamic-green"
-                        asChild
+                        onClick={scrollToWaitlist}
                       >
-                        <Link to="/auth?mode=signup">Start Your Journey</Link>
+                        Start Your Journey
                       </Button>
                       <Button 
                         variant="outline" 
@@ -90,7 +107,7 @@ const Landing = () => {
           </div>
 
           <div className={`absolute inset-0 transition-opacity duration-500 ${!isHero1Visible ? 'opacity-100' : 'opacity-0'}`}>
-            <div className="bg-islamic-blue text-white py-20">
+            <div className="bg-gradient-to-r from-islamic-blue to-islamic-teal text-white py-20">
               <div className="container mx-auto px-4 max-w-6xl">
                 <div className="flex flex-col md:flex-row md:items-center">
                   <div className="md:w-1/2 mb-8 md:mb-0">
@@ -122,7 +139,7 @@ const Landing = () => {
                         { icon: Baby, title: "Physical Development", description: "Track physical growth milestones" },
                         { icon: BookOpen, title: "Cognitive Learning", description: "Monitor intellectual development" },
                         { icon: Heart, title: "Emotional Growth", description: "Nurture emotional intelligence" },
-                        { icon: CheckCircle, title: "Islamic Values", description: "Incorporate Islamic teachings" }
+                        { icon: Crown, title: "Islamic Values", description: "Incorporate Islamic teachings" }
                       ].map((item, index) => (
                         <div key={index} className="bg-white/10 p-4 rounded-lg backdrop-blur-sm">
                           <item.icon className="h-8 w-8 mb-2 text-islamic-gold" />
@@ -142,7 +159,7 @@ const Landing = () => {
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4 text-islamic-green">Features Designed for Muslim Fathers</h2>
+              <h2 className="text-3xl font-bold mb-4 text-islamic-green">Features Designed for Modern Muslim Dads</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Our app combines Islamic wisdom with practical parenting tools to help you raise children with strong faith and character.
               </p>
@@ -178,11 +195,29 @@ const Landing = () => {
           </div>
         </section>
 
+        {/* Waitlist Section */}
+        <section ref={waitlistRef} className="py-16 bg-gradient-to-br from-islamic-green/5 to-islamic-teal/5">
+          <div className="container mx-auto px-4 max-w-6xl text-center">
+            <div className="max-w-2xl mx-auto">
+              <h2 className="text-3xl font-bold mb-4 text-islamic-green">Join Our Exclusive Waitlist</h2>
+              <p className="text-lg text-gray-600 mb-8">
+                Be among the first to experience Fatherhood Iman Journey when we launch. Get early access and special benefits.
+              </p>
+              <WaitlistForm />
+            </div>
+          </div>
+        </section>
+
         {/* Call to Action */}
-        <section className="py-16 bg-islamic-green text-white text-center">
+        <section className="py-16 bg-gradient-to-r from-islamic-green to-islamic-teal text-white text-center">
           <div className="container mx-auto px-4 max-w-6xl">
-            <Heart className="h-16 w-16 mx-auto mb-6 text-islamic-gold" />
-            <h2 className="text-3xl font-bold mb-4">Start Your Iman Journey Today</h2>
+            <div className="w-16 h-16 mx-auto mb-6 bg-white rounded-full flex items-center justify-center">
+              <div className="relative">
+                <Shield className="h-8 w-8 text-islamic-green" />
+                <Star className="h-4 w-4 text-islamic-gold absolute -top-1 -right-1" />
+              </div>
+            </div>
+            <h2 className="text-3xl font-bold mb-4">Join The Modern Muslim Dad Today</h2>
             <p className="max-w-2xl mx-auto mb-8 text-islamic-sand">
               Join thousands of Muslim fathers growing spiritually while nurturing their families with confidence and purpose.
             </p>
@@ -206,34 +241,23 @@ const Landing = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8">
+      <footer className="bg-gray-50 py-8">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-islamic-green flex items-center justify-center">
-                  <Heart className="h-4 w-4 text-white" />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-islamic-green to-islamic-teal flex items-center justify-center">
+                  <div className="relative">
+                    <Shield className="h-4 w-4 text-white" />
+                    <Star className="h-2 w-2 text-islamic-gold absolute -top-0.5 -right-0.5" />
+                  </div>
                 </div>
-                <span className="font-bold text-xl">Iman Journey</span>
-              </div>
-              <p className="text-sm mt-2 text-gray-300">Supporting Muslim fathers in their parenting journey</p>
-            </div>
-            <div className="flex gap-8">
-              <div>
-                <h4 className="font-bold mb-2">Quick Links</h4>
-                <ul className="space-y-1 text-sm text-gray-300">
-                  <li>
-                    <Link to="/auth?mode=signin" className="hover:text-islamic-gold">Sign In</Link>
-                  </li>
-                  <li>
-                    <Link to="/auth?mode=signup" className="hover:text-islamic-gold">Register</Link>
-                  </li>
-                </ul>
+                <span className="font-bold text-islamic-green">The Modern Muslim Dad</span>
               </div>
             </div>
-          </div>
-          <div className="mt-8 pt-4 border-t border-gray-700 text-sm text-center text-gray-400">
-            © {new Date().getFullYear()} Iman Journey. All rights reserved.
+            <div className="text-sm text-gray-500">
+              © {new Date().getFullYear()} The Modern Muslim Dad. All rights reserved.
+            </div>
           </div>
         </div>
       </footer>
