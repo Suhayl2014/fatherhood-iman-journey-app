@@ -9,7 +9,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { BookOpen, Baby, Users, Shield, Star } from 'lucide-react';
+import { BookOpen, Baby, Users, Heart, Star } from 'lucide-react';
 
 const AuthenticatedNav = () => {
   const { signOut } = useAuth();
@@ -22,7 +22,7 @@ const AuthenticatedNav = () => {
             <Link to="/" className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-islamic-green to-islamic-teal flex items-center justify-center shadow-md">
                 <div className="relative">
-                  <Shield className="h-5 w-5 text-white" />
+                  <Heart className="h-5 w-5 text-white" />
                   <Star className="h-2.5 w-2.5 text-islamic-gold absolute -top-0.5 -right-0.5" />
                 </div>
               </div>

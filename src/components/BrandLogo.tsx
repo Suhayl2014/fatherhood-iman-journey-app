@@ -1,4 +1,4 @@
-import { Shield, Star, BookOpen } from 'lucide-react';
+import { Heart, Star, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface BrandLogoProps {
@@ -36,7 +36,7 @@ export function BrandLogo({ size = 'md', showText = true }: BrandLogoProps) {
       <div className={`${sizes[size].container} rounded-full bg-gradient-to-br from-islamic-green to-islamic-teal flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow relative`}>
         <div className="absolute inset-0 rounded-full bg-islamic-pattern opacity-10"></div>
         <div className="relative">
-          <Shield className={`${sizes[size].icon} text-white`} />
+          <Heart className={`${sizes[size].icon} text-white`} />
           <Star className={`${sizes[size].star} text-islamic-gold absolute -top-0.5 -right-0.5`} />
         </div>
       </div>
