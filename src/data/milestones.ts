@@ -1,4 +1,3 @@
-
 export interface Milestone {
   id: string;
   ageRange: string;
@@ -12,7 +11,7 @@ export interface Milestone {
 export const milestones: Milestone[] = [
   {
     id: "m1",
-    ageRange: "0-3 months",
+    ageRange: "0-1 year",
     title: "First Smiles",
     description: "Your baby will begin to smile responsively, especially to your voice and face.",
     islamicPerspective: "The Prophet Muhammad (peace be upon him) had great love for children and would smile at them. A child's smile is considered one of Allah's blessings and a sign of fitrah (natural disposition).",
@@ -26,7 +25,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m2",
-    ageRange: "3-6 months",
+    ageRange: "0-1 year",
     title: "Recognizing Voices",
     description: "Your baby will recognize familiar voices, especially parents, and may turn toward sounds.",
     islamicPerspective: "This is a perfect time to introduce the sounds of the Quran. The pure sound of recitation can soothe babies and begin their lifelong connection with Allah's words.",
@@ -40,7 +39,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m3",
-    ageRange: "6-9 months",
+    ageRange: "0-1 year",
     title: "Beginning to Crawl",
     description: "Your baby will become more mobile, possibly crawling or scooting to explore their environment.",
     islamicPerspective: "In Islam, exploration and seeking knowledge are encouraged from early ages. This natural curiosity is a gift that should be nurtured within safe boundaries.",
@@ -54,7 +53,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m4",
-    ageRange: "9-12 months",
+    ageRange: "1-2 years",
     title: "First Words",
     description: "Your baby may begin saying simple words or attempting to communicate verbally.",
     islamicPerspective: "The first word many Muslim parents encourage is 'Allah.' Teaching children about their Creator from these early stages plants the seeds of faith.",
@@ -68,7 +67,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m5",
-    ageRange: "12-18 months",
+    ageRange: "1-2 years",
     title: "Walking Independently",
     description: "Your toddler will begin walking without support, exploring their environment with new freedom.",
     islamicPerspective: "Walking is mentioned in the Quran as one of Allah's signs and blessings. This new independence is an opportunity to begin teaching about gratitude for our physical abilities.",
@@ -82,7 +81,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m6",
-    ageRange: "18-24 months",
+    ageRange: "1-2 years",
     title: "Growing Empathy",
     description: "Your toddler will begin showing concern when others are upset and may try to comfort them.",
     islamicPerspective: "Empathy and compassion (rahmah) are core Islamic values that the Prophet Muhammad (peace be upon him) emphasized. Nurturing these qualities early helps develop a merciful heart.",
@@ -96,7 +95,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m7",
-    ageRange: "2-3 years",
+    ageRange: "3-4 years",
     title: "Prayer Imitation",
     description: "Your child will begin to imitate prayer movements and may try to join family in salah.",
     islamicPerspective: "While children aren't obligated to pray until reaching maturity, this natural imitation builds the foundation for their future worship. The Prophet (peace be upon him) was gentle with children who approached during prayer.",
@@ -111,7 +110,7 @@ export const milestones: Milestone[] = [
   // New milestones
   {
     id: "m8",
-    ageRange: "0-3 months",
+    ageRange: "0-1 year",
     title: "Recognizing Parents",
     description: "Your baby will begin to recognize their parents' faces and voices, showing preference for them.",
     islamicPerspective: "Allah has created children with a natural affinity for their parents. This bond forms the foundation of family love that Islam holds in high regard.",
@@ -125,7 +124,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m9",
-    ageRange: "3-6 months",
+    ageRange: "0-1 year",
     title: "Reacting to Names of Allah",
     description: "Your baby may show special attention when hearing the names of Allah or Quranic recitation.",
     islamicPerspective: "In Islamic tradition, the soul already knows its Creator. The fitrah (natural disposition) responds innately to divine reminders, even in infancy.",
@@ -139,7 +138,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m10",
-    ageRange: "6-9 months",
+    ageRange: "1-2 years",
     title: "First Tastes",
     description: "Your baby begins trying solid foods and experiencing new flavors.",
     islamicPerspective: "The Sunnah encourages starting children with naturally sweet foods like dates. The Prophet Muhammad (peace be upon him) practiced tahneek, placing softened dates in a newborn's mouth.",
@@ -153,7 +152,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m11",
-    ageRange: "9-12 months",
+    ageRange: "1-2 years",
     title: "Responding to Boundaries",
     description: "Your baby begins understanding simple instructions and boundaries.",
     islamicPerspective: "Islam emphasizes the importance of gentle but clear guidance from an early age. The Prophet Muhammad (peace be upon him) taught that we should begin teaching our children from age seven.",
@@ -167,7 +166,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m12",
-    ageRange: "12-18 months",
+    ageRange: "1-2 years",
     title: "First Islamic Words",
     description: "Your toddler begins attempting Islamic phrases like 'Allah' or 'Bismillah'.",
     islamicPerspective: "The Prophet Muhammad (peace be upon him) said: 'Make the first word spoken by your children be 'La ilaha illa Allah' (There is no god but Allah)'.",
@@ -181,7 +180,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m13",
-    ageRange: "18-24 months",
+    ageRange: "3-4 years",
     title: "Identifying Islamic Symbols",
     description: "Your toddler starts recognizing Islamic imagery such as mosques, the crescent moon, or prayer rugs.",
     islamicPerspective: "Developing a visual understanding of Islamic symbols helps children form their Muslim identity and feel connected to their faith community.",
@@ -195,7 +194,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m14",
-    ageRange: "2-3 years",
+    ageRange: "3-4 years",
     title: "Joining in Dua",
     description: "Your child begins to raise their hands and say 'Ameen' during family duas.",
     islamicPerspective: "Engaging children in dua from an early age teaches them to turn to Allah for their needs and to express gratitude for blessings.",
@@ -209,7 +208,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m15",
-    ageRange: "3-4 years",
+    ageRange: "5-6 years",
     title: "Understanding Islamic Stories",
     description: "Your child can follow and remember simple stories about the prophets and companions.",
     islamicPerspective: "The Quran emphasizes the importance of learning from the stories of the prophets. These narratives help children understand Islamic values through examples.",
@@ -223,7 +222,7 @@ export const milestones: Milestone[] = [
   },
   {
     id: "m16",
-    ageRange: "4-5 years",
+    ageRange: "7+ years",
     title: "Understanding Charity",
     description: "Your child begins to grasp the concept of giving to others for the sake of Allah.",
     islamicPerspective: "Charity (sadaqah) is a fundamental Islamic principle. The Prophet Muhammad (peace be upon him) was the most generous during Ramadan, teaching us the importance of giving.",

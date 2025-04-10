@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -7,11 +6,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, MessageSquare, Calendar, ChevronUp, ChevronDown, Heart } from "lucide-react";
+import { Users, MessageSquare, Calendar, ChevronUp, ChevronDown, Heart, Send } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
+// Define interfaces for better type safety
+interface Reply {
+  id: string;
+  author: string;
+  content: string;
+  date: string;
+}
+
+interface Discussion {
+  id: string;
+  author: string;
+  title: string;
+  content: string;
+  date: string;
+  category: string;
+  replies: number;
+  likes: number;
+  isLiked: boolean;
+  replyList: Reply[];
+}
+
 // Sample community discussions
-const sampleDiscussions = [
+const sampleDiscussions: Discussion[] = [
   {
     id: '1',
     author: 'Ibrahim A.',
@@ -21,7 +41,21 @@ const sampleDiscussions = [
     category: 'Work-Life Balance',
     replies: 8,
     likes: 12,
-    isLiked: false
+    isLiked: false,
+    replyList: [
+      {
+        id: 'r1-1',
+        author: 'Omar K.',
+        content: "I've found that setting specific times for family activities helps. Even if it's just 30 minutes of dedicated time after work, it makes a difference.",
+        date: '1 day ago'
+      },
+      {
+        id: 'r1-2',
+        author: 'Hassan M.',
+        content: "Consider flexible work arrangements if possible. I negotiated a work-from-home day each week which has been invaluable for family time.",
+        date: '1 day ago'
+      }
+    ]
   },
   {
     id: '2',
@@ -32,7 +66,21 @@ const sampleDiscussions = [
     category: 'Islamic Education',
     replies: 15,
     likes: 23,
-    isLiked: false
+    isLiked: false,
+    replyList: [
+      {
+        id: 'r2-1',
+        author: 'Ahmad S.',
+        content: "I started by making prayer a family activity. We pray together, and I explain each movement in a simple way. Now my daughter looks forward to it!",
+        date: '4 days ago'
+      },
+      {
+        id: 'r2-2',
+        author: 'Khalid R.',
+        content: "Children's prayer mats with Islamic designs helped a lot. Also, letting them lead the family in prayer occasionally gives them a sense of responsibility.",
+        date: '3 days ago'
+      }
+    ]
   },
   {
     id: '3',
@@ -43,7 +91,21 @@ const sampleDiscussions = [
     category: 'Cultural Challenges',
     replies: 21,
     likes: 34,
-    isLiked: false
+    isLiked: false,
+    replyList: [
+      {
+        id: 'r3-1',
+        author: 'Zainab F.',
+        content: "Regular family discussions about our faith help. We talk about what they learned at school and how it relates to our Islamic values.",
+        date: '6 days ago'
+      },
+      {
+        id: 'r3-2',
+        author: 'Mohammed A.',
+        content: "I've found that connecting with other Muslim families in the area has been crucial. We organize playdates and activities that reinforce our shared values.",
+        date: '5 days ago'
+      }
+    ]
   },
 ];
 
@@ -80,25 +142,39 @@ const sampleEvents = [
 
 const Community = () => {
   const { toast } = useToast();
-  const [discussions, setDiscussions] = useState(sampleDiscussions);
+  const [discussions, setDiscussions] = useState<Discussion[]>(sampleDiscussions);
   const [events, setEvents] = useState(sampleEvents);
   
   // New discussion form state
   const [newPost, setNewPost] = useState({
     title: '',
     category: '',
-    content: ''
+    content: '',
+    isAnonymous: false
   });
+  
+  // Reply state
+  const [replyContent, setReplyContent] = useState('');
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [isAnonymousReply, setIsAnonymousReply] = useState(false);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Handle discussion form change
   const handlePostChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setNewPost(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const { name, value, type } = e.target;
+    if (type === 'checkbox') {
+      const checkbox = e.target as HTMLInputElement;
+      setNewPost(prev => ({
+        ...prev,
+        [name]: checkbox.checked
+      }));
+    } else {
+      setNewPost(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
   
   // Handle discussion form submit
@@ -108,23 +184,25 @@ const Community = () => {
     
     // Simulate posting a discussion
     setTimeout(() => {
-      const newDiscussion = {
+      const newDiscussion: Discussion = {
         id: `${discussions.length + 1}`,
-        author: 'You',
+        author: newPost.isAnonymous ? 'Anonymous' : 'You',
         title: newPost.title,
         content: newPost.content,
         date: 'Just now',
         category: newPost.category || 'General',
         replies: 0,
         likes: 0,
-        isLiked: false
+        isLiked: false,
+        replyList: []
       };
       
       setDiscussions([newDiscussion, ...discussions]);
       setNewPost({
         title: '',
         category: '',
-        content: ''
+        content: '',
+        isAnonymous: false
       });
       
       toast({
@@ -150,6 +228,39 @@ const Community = () => {
       }
       return discussion;
     }));
+  };
+  
+  // Handle reply submission
+  const handleReplySubmit = (discussionId: string) => {
+    if (!replyContent.trim()) return;
+    
+    setDiscussions(prev => prev.map(discussion => {
+      if (discussion.id === discussionId) {
+        const newReply: Reply = {
+          id: `reply-${Date.now()}`,
+          author: isAnonymousReply ? 'Anonymous' : 'You',
+          content: replyContent,
+          date: 'Just now'
+        };
+        
+        return {
+          ...discussion,
+          replies: discussion.replies + 1,
+          replyList: [...discussion.replyList, newReply]
+        };
+      }
+      return discussion;
+    }));
+    
+    setReplyContent('');
+    setReplyingTo(null);
+    setIsAnonymousReply(false);
+    
+    toast({
+      title: "Reply Posted",
+      description: "Your reply has been added to the discussion.",
+      duration: 3000,
+    });
   };
   
   // Handle register for event
@@ -244,6 +355,20 @@ const Community = () => {
                               required
                             />
                           </div>
+                          
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              id="isAnonymous"
+                              name="isAnonymous"
+                              checked={newPost.isAnonymous}
+                              onChange={handlePostChange}
+                              className="rounded border-gray-300 text-islamic-green focus:ring-islamic-green"
+                            />
+                            <label htmlFor="isAnonymous" className="text-sm text-gray-600">
+                              Post anonymously
+                            </label>
+                          </div>
                         </CardContent>
                         <CardFooter>
                           <Button 
@@ -295,7 +420,12 @@ const Community = () => {
                         <DiscussionCard 
                           key={discussion.id} 
                           discussion={discussion} 
-                          onLike={() => handleLike(discussion.id)} 
+                          onLike={() => handleLike(discussion.id)}
+                          replyContent={replyContent}
+                          setReplyContent={setReplyContent}
+                          isAnonymousReply={isAnonymousReply}
+                          setIsAnonymousReply={setIsAnonymousReply}
+                          handleReplySubmit={handleReplySubmit}
                         />
                       ))}
                     </div>
@@ -438,8 +568,26 @@ const Community = () => {
 };
 
 // Discussion Card Component
-const DiscussionCard = ({ discussion, onLike }: { discussion: any; onLike: () => void }) => {
+const DiscussionCard = ({ 
+  discussion, 
+  onLike,
+  replyContent,
+  setReplyContent,
+  isAnonymousReply,
+  setIsAnonymousReply,
+  handleReplySubmit
+}: { 
+  discussion: Discussion; 
+  onLike: () => void;
+  replyContent: string;
+  setReplyContent: (content: string) => void;
+  isAnonymousReply: boolean;
+  setIsAnonymousReply: (isAnonymous: boolean) => void;
+  handleReplySubmit: (discussionId: string) => void;
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+  const [showReplyForm, setShowReplyForm] = useState(false);
   
   return (
     <Card className="overflow-hidden">
@@ -467,6 +615,89 @@ const DiscussionCard = ({ discussion, onLike }: { discussion: any; onLike: () =>
             )}
           </button>
         )}
+        
+        {/* Display Replies */}
+        {discussion.replyList && discussion.replyList.length > 0 && (
+          <div className="mt-4">
+            <button
+              onClick={() => setShowReplies(!showReplies)}
+              className="text-islamic-teal hover:text-islamic-green text-sm font-medium flex items-center"
+            >
+              {showReplies ? (
+                <>Hide {discussion.replies} replies <ChevronUp className="ml-1 h-4 w-4" /></>
+              ) : (
+                <>View {discussion.replies} replies <ChevronDown className="ml-1 h-4 w-4" /></>
+              )}
+            </button>
+            
+            {showReplies && (
+              <div className="mt-3 space-y-3 pl-4 border-l-2 border-islamic-teal/20">
+                {discussion.replyList.map((reply) => (
+                  <div key={reply.id} className="bg-gray-50 rounded-lg p-3">
+                    <div className="flex justify-between items-start">
+                      <p className="text-sm font-medium">{reply.author}</p>
+                      <p className="text-xs text-gray-500">{reply.date}</p>
+                    </div>
+                    <p className="text-sm mt-1">{reply.content}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        
+        {/* Reply Form */}
+        {showReplyForm && (
+          <div className="mt-4 space-y-3">
+            <Textarea
+              placeholder="Write your reply..."
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              className="w-full min-h-[100px]"
+            />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id={`anonymous-reply-${discussion.id}`}
+                  checked={isAnonymousReply}
+                  onChange={(e) => setIsAnonymousReply(e.target.checked)}
+                  className="rounded border-gray-300 text-islamic-green focus:ring-islamic-green"
+                />
+                <label htmlFor={`anonymous-reply-${discussion.id}`} className="text-sm text-gray-600">
+                  Reply anonymously
+                </label>
+              </div>
+              <div className="flex space-x-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setShowReplyForm(false);
+                    setReplyContent('');
+                    setIsAnonymousReply(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-islamic-green"
+                  onClick={() => {
+                    if (replyContent.trim()) {
+                      handleReplySubmit(discussion.id);
+                      setShowReplyForm(false);
+                    }
+                  }}
+                  disabled={!replyContent.trim()}
+                >
+                  <Send className="h-4 w-4 mr-1" />
+                  Post Reply
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </CardContent>
       <CardFooter className="flex justify-between">
         <div className="flex items-center space-x-4">
@@ -486,8 +717,12 @@ const DiscussionCard = ({ discussion, onLike }: { discussion: any; onLike: () =>
           </div>
         </div>
         
-        <Button variant="outline" size="sm">
-          Reply
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={() => setShowReplyForm(!showReplyForm)}
+        >
+          {showReplyForm ? 'Cancel Reply' : 'Reply'}
         </Button>
       </CardFooter>
     </Card>
