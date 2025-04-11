@@ -26,16 +26,61 @@ serve(async (req) => {
 
     // Send welcome email
     const { data, error } = await resend.emails.send({
-      from: 'Fatherhood Iman Journey <onboarding@resend.dev>',
+      from: 'The Modern Muslim Dad <onboarding@resend.dev>',
       to: email,
-      subject: 'Welcome to Fatherhood Iman Journey!',
+      subject: "You're In! Welcome to The Modern Muslim Dad",
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #2563eb;">Welcome to Fatherhood Iman Journey!</h1>
-          <p>Thank you for joining our waitlist. We're excited to have you on board!</p>
-          <p>We'll keep you updated on our progress and notify you as soon as we launch.</p>
-          <p>Best regards,<br>The Fatherhood Iman Journey Team</p>
-        </div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Welcome to The Modern Muslim Dad</title>
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #f9f9f9;">
+    <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+      <tr>
+        <td style="text-align: center;">
+          <h2 style="color: #333333;">You're In! 🧔🏽💫</h2>
+          <h3 style="margin-top: 0; color: #666;">Welcome to <strong>The Modern Muslim Dad</strong></h3>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 20px 0; color: #333; font-size: 16px; line-height: 1.6;">
+          <p><strong>As-salaamu Alaikum,</strong></p>
+
+          <p>Just wanted to say — <strong>a huge thank you</strong> for joining <em>The Modern Muslim Dad</em> community!</p>
+
+          <p>We're genuinely excited (and honored!) to have you on this journey with us. You're not just signing up for a product — you're stepping into a movement: one that's about <strong>intentional fatherhood, rooted in faith, love, and purpose</strong>.</p>
+
+          <p>✨ <strong>Here's what's coming your way:</strong></p>
+          <ul style="padding-left: 20px;">
+            <li>Islamic milestone tracking for your child (ages 0–7)</li>
+            <li>Duas, sunnahs, and tools to grow as a father</li>
+            <li>Community, stories, and weekly faith-based parenting gems</li>
+          </ul>
+
+          <p>We're working hard behind the scenes, and your early support means the world to us. You're part of the foundation. 💛</p>
+
+          <p>Until launch, keep an eye on your inbox — we'll share sneak peeks, exclusive early access updates, and maybe a dad joke or two 😉</p>
+
+          <p><strong>JazakAllah khayr for your trust — we can't wait to build this with you.</strong></p>
+
+          <p>With gratitude,<br />
+          — <strong>Suhayl</strong><br />
+          Founder, <em>The Modern Muslim Dad</em><br />
+          <em>Empowering fathers with faith.</em></p>
+        </td>
+      </tr>
+    </table>
+    <table align="center" width="100%" style="max-width: 600px; margin: 20px auto; text-align: center;">
+      <tr>
+        <td style="color: #999999; font-size: 12px;">
+          <p>You're receiving this email because you joined the waitlist at The Modern Muslim Dad.</p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
       `,
     })
 
