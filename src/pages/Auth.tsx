@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import useAuth from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import {
   Form,
   FormControl,

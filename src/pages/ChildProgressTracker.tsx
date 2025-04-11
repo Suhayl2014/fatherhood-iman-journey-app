@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, ChevronDown, ChevronUp, CheckCircle2, Circle, Star, Award, Crown, Check, User, Plus } from 'lucide-react';
 import { Child } from '@/types/database.types';
 import { supabase } from '@/integrations/supabase/client';
-import useAuth from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/components/ui/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';

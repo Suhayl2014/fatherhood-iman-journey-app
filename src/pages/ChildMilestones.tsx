@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import useAuth from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { milestones, Milestone } from '@/data/milestones';
 import { ChildMilestone, Child } from '@/types/database.types';
 import Header from '@/components/Header';
