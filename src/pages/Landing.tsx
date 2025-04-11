@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Baby, BookOpen, CheckCircle, Star, Crown, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import useAuth from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import AuthenticatedNav from '@/components/AuthenticatedNav';
 import { WaitlistForm } from "@/components/WaitlistForm";
 

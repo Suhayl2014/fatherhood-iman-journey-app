@@ -15,8 +15,6 @@ export function WaitlistForm() {
     setIsLoading(true);
 
     try {
-      console.log('Checking if email exists:', email);
-      
       // Check if email already exists
       const { data: existingEntry, error: selectError } = await supabase
         .from('waitlist')
@@ -24,10 +22,12 @@ export function WaitlistForm() {
         .eq('email', email)
         .single();
 
-      if (selectError) {
+      if (selectError && selectError.code !== 'PGRST116') {
         console.error('Error checking if email exists:', selectError);
-        // Continue with insert even if select fails
-      } else if (existingEntry) {
+        throw selectError;
+      }
+
+      if (existingEntry) {
         toast({
           title: "You're already on our waitlist!",
           description: "We'll notify you when we launch.",
@@ -37,8 +37,6 @@ export function WaitlistForm() {
         return;
       }
 
-      console.log('Adding email to waitlist:', email);
-      
       // Add email to waitlist
       const { error: insertError } = await supabase
         .from('waitlist')
@@ -54,8 +52,6 @@ export function WaitlistForm() {
         throw insertError;
       }
 
-      console.log('Sending welcome email to:', email);
-      
       // Send welcome email using Supabase Edge Function
       const { error: emailError } = await supabase.functions.invoke('send-waitlist-email', {
         body: { email }
@@ -65,7 +61,7 @@ export function WaitlistForm() {
         console.error('Error sending welcome email:', emailError);
         // Don't throw the error, just log it - we still want to show success for waitlist signup
       }
-      
+
       toast({
         title: "Thank you for joining our waitlist!",
         description: "We've sent you a confirmation email with more details.",

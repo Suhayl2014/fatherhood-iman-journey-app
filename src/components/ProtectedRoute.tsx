@@ -1,5 +1,5 @@
-import { Navigate } from 'react-router-dom';
-import useAuth from '../context/AuthContext';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
