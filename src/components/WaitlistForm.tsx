@@ -15,14 +15,19 @@ export function WaitlistForm() {
     setIsLoading(true);
 
     try {
+      console.log('Checking if email exists:', email);
+      
       // Check if email already exists
-      const { data: existingEntry } = await supabase
+      const { data: existingEntry, error: selectError } = await supabase
         .from('waitlist')
         .select('email')
         .eq('email', email)
         .single();
 
-      if (existingEntry) {
+      if (selectError) {
+        console.error('Error checking if email exists:', selectError);
+        // Continue with insert even if select fails
+      } else if (existingEntry) {
         toast({
           title: "You're already on our waitlist!",
           description: "We'll notify you when we launch.",
@@ -32,8 +37,10 @@ export function WaitlistForm() {
         return;
       }
 
+      console.log('Adding email to waitlist:', email);
+      
       // Add email to waitlist
-      const { error } = await supabase
+      const { error: insertError } = await supabase
         .from('waitlist')
         .insert([
           { 
@@ -42,7 +49,22 @@ export function WaitlistForm() {
           }
         ]);
 
-      if (error) throw error;
+      if (insertError) {
+        console.error('Error adding to waitlist:', insertError);
+        throw insertError;
+      }
+
+      console.log('Sending welcome email to:', email);
+      
+      // Send welcome email using Supabase Edge Function
+      const { error: emailError } = await supabase.functions.invoke('send-waitlist-email', {
+        body: { email }
+      });
+
+      if (emailError) {
+        console.error('Error sending welcome email:', emailError);
+        // Don't throw the error, just log it - we still want to show success for waitlist signup
+      }
       
       toast({
         title: "Thank you for joining our waitlist!",
@@ -51,11 +73,11 @@ export function WaitlistForm() {
       });
       
       setEmail('');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding to waitlist:', error);
       toast({
         title: "Something went wrong",
-        description: "Please try again later.",
+        description: error.message || "Please try again later.",
         variant: "destructive",
       });
     } finally {

@@ -33,10 +33,10 @@ function App() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          <BrowserRouter>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <TooltipProvider>
             <div className="flex flex-col min-h-screen pb-16 md:pb-0">
               <Suspense fallback={<Loading />}>
                 <Routes>
@@ -128,13 +128,13 @@ function App() {
               </Suspense>
               <MobileNav />
             </div>
-          </BrowserRouter>
-          <Toaster />
-          <Sonner />
-        </TooltipProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+            <Toaster />
+            <Sonner />
+          </TooltipProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   );
 }
 
-export default App; 
+export default App;

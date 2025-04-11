@@ -26,7 +26,14 @@ export default defineConfig({
     minify: 'esbuild'
   },
   server: {
-    host: true,
-    port: 8080
+    host: '0.0.0.0',
+    port: 8084,
+    strictPort: true,
+    hmr: {
+      protocol: 'ws',
+      host: 'localhost',
+      port: 8084,
+      clientPort: 8084
+    }
   }
 });

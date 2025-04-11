@@ -34,26 +34,26 @@ const Landing = () => {
       {user ? (
         <AuthenticatedNav />
       ) : (
-        <header className="bg-white shadow-sm">
-          <div className="container-app">
-            <div className="flex items-center justify-between py-4">
-              <div className="flex items-center">
+      <header className="bg-white shadow-sm">
+        <div className="container-app">
+          <div className="flex items-center justify-between py-4">
+            <div className="flex items-center">
                 <Link to="/auth" className="flex items-center gap-2">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-islamic-green to-islamic-teal flex items-center justify-center shadow-md">
                     <div className="relative">
                       <Heart className="h-6 w-6 text-white" />
                       <Shield className="h-3 w-3 text-islamic-gold absolute -top-1 -right-1" />
                     </div>
-                  </div>
-                  <div>
+                </div>
+                <div>
                     <h1 className="text-xl font-bold text-islamic-green">The Modern Muslim Dad</h1>
                     <p className="text-xs text-islamic-teal">Empowering fathers with faith</p>
-                  </div>
-                </Link>
-              </div>
+                </div>
+              </Link>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
       )}
 
       <main className="flex-grow">
@@ -206,7 +206,7 @@ const Landing = () => {
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-islamic-green to-islamic-teal flex items-center justify-center">
                   <div className="relative">
-                    <Heart className="h-4 w-4 text-white" />
+                  <Heart className="h-4 w-4 text-white" />
                     <Star className="h-2 w-2 text-islamic-gold absolute -top-0.5 -right-0.5" />
                   </div>
                 </div>

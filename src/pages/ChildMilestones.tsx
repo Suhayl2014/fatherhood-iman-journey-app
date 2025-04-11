@@ -385,8 +385,8 @@ const ChildMilestones = () => {
                 </ul>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button onClick={() => navigate('/dashboard')} variant="outline">
-                    Return to Dashboard
-                  </Button>
+                Return to Dashboard
+              </Button>
                   <Button onClick={() => navigate('/add-child')}>
                     Add New Child
                   </Button>
