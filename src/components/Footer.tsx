@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Heart } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const Footer = () => {
   return (
@@ -7,14 +7,8 @@ const Footer = () => {
       <div className="container-app px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
           <div className="md:col-span-1">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-islamic-green flex items-center justify-center">
-                <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-islamic-cream" />
-              </div>
-              <div>
-                <h3 className="text-lg sm:text-xl font-bold text-islamic-green">Fatherhood Journey</h3>
-                <p className="text-xs text-islamic-teal">For Muslim Fathers</p>
-              </div>
+            <Link to="/">
+              <BrandLogo size="md" />
             </Link>
             <p className="mt-3 sm:mt-4 text-xs sm:text-sm text-islamic-green/80">
               Supporting Muslim fathers on their journey through parenthood with Islamic wisdom and practical guidance.

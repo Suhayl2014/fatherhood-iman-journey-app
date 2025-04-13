@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '../context/AuthContext';
 import AuthenticatedNav from '@/components/AuthenticatedNav';
 import { WaitlistForm } from "@/components/WaitlistForm";
+import { BrandLogo } from '@/components/BrandLogo';
 
 const Landing = () => {
   const [isHero1Visible, setIsHero1Visible] = useState(true);
@@ -37,20 +38,9 @@ const Landing = () => {
       <header className="bg-white shadow-sm">
         <div className="container-app">
           <div className="flex items-center justify-between py-4">
-            <div className="flex items-center">
-                <Link to="/auth" className="flex items-center gap-2">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-islamic-green to-islamic-teal flex items-center justify-center shadow-md">
-                    <div className="relative">
-                      <Heart className="h-6 w-6 text-white" />
-                      <Shield className="h-3 w-3 text-islamic-gold absolute -top-1 -right-1" />
-                    </div>
-                </div>
-                <div>
-                    <h1 className="text-xl font-bold text-islamic-green">The Modern Muslim Dad</h1>
-                    <p className="text-xs text-islamic-teal">Empowering fathers with faith</p>
-                </div>
-              </Link>
-            </div>
+            <Link to="/auth">
+              <BrandLogo size="lg" />
+            </Link>
           </div>
         </div>
       </header>
@@ -203,19 +193,9 @@ const Landing = () => {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-islamic-green to-islamic-teal flex items-center justify-center">
-                  <div className="relative">
-                  <Heart className="h-4 w-4 text-white" />
-                    <Star className="h-2 w-2 text-islamic-gold absolute -top-0.5 -right-0.5" />
-                  </div>
-                </div>
-                <span className="font-bold text-islamic-green">The Modern Muslim Dad</span>
-              </div>
+              <BrandLogo size="sm" showText={false} />
             </div>
-            <div className="text-sm text-gray-500">
-              © {new Date().getFullYear()} The Modern Muslim Dad. All rights reserved.
-            </div>
+            <div className="text-sm text-gray-500">© {new Date().getFullYear()} The Modern Muslim Dad. All rights reserved.</div>
           </div>
         </div>
       </footer>

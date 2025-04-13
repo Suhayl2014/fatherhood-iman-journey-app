@@ -37,7 +37,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TooltipProvider>
-            <div className="flex flex-col min-h-screen pb-16 md:pb-0">
+            <div className="flex flex-col min-h-screen">
               <Suspense fallback={<Loading />}>
                 <Routes>
                   <Route path="/" element={<Landing />} />
