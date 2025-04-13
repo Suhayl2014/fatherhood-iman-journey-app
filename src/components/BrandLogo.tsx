@@ -33,7 +33,7 @@ export function BrandLogo({ size = 'md', showText = true }: BrandLogoProps) {
         <div className="absolute inset-0 rounded-full bg-islamic-pattern opacity-10"></div>
         <div className="relative w-full h-full">
           <img 
-            src="/images/ChatGPT Image Apr 13, 2025, 01_59_30 PM.png?v=2" 
+            src="/images/logo.png" 
             alt="The Modern Muslim Dad Logo"
             className="w-full h-full object-cover"
           />

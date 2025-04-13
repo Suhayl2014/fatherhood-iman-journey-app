@@ -26,7 +26,7 @@ serve(async (req) => {
 
     // Send welcome email
     const { data, error } = await resend.emails.send({
-      from: 'The Modern Muslim Dad <onboarding@resend.dev>',
+      from: 'The Modern Muslim Dad <info@themodernmuslimdad.co.uk>',
       to: email,
       subject: "You're In! Welcome to The Modern Muslim Dad",
       html: `
