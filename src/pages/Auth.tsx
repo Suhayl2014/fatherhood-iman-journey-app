@@ -227,10 +227,10 @@ const Auth = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-50 py-6 border-t border-gray-200">
+      <footer className="bg-islamic-cream py-6 border-t border-islamic-sand/30">
         <div className="container mx-auto px-4 text-center">
           <BrandLogo size="sm" showText={false} />
-          <p className="mt-2 text-xs text-gray-500">
+          <p className="mt-2 text-xs text-islamic-green/60">
             &copy; {new Date().getFullYear()} The Modern Muslim Dad. All rights reserved.
           </p>
         </div>

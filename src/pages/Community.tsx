@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,8 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, MessageSquare, Calendar, ChevronUp, ChevronDown, Heart, Send } from "lucide-react";
+import { Users, MessageSquare, Calendar, ChevronUp, ChevronDown, Heart, Send, Filter } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/context/AuthContext';
 
 // Define interfaces for better type safety
 interface Reply {
@@ -30,120 +33,15 @@ interface Discussion {
   replyList: Reply[];
 }
 
-// Sample community discussions
-const sampleDiscussions: Discussion[] = [
-  {
-    id: '1',
-    author: 'Ibrahim A.',
-    title: "Balancing work and quality time with children",
-    content: "As a software engineer, I often find myself working long hours. How do other fathers balance demanding jobs with being present for their children? I want to ensure I'm fulfilling my responsibility as a father while also providing financially.",
-    date: '2 days ago',
-    category: 'Work-Life Balance',
-    replies: 8,
-    likes: 12,
-    isLiked: false,
-    replyList: [
-      {
-        id: 'r1-1',
-        author: 'Omar K.',
-        content: "I've found that setting specific times for family activities helps. Even if it's just 30 minutes of dedicated time after work, it makes a difference.",
-        date: '1 day ago'
-      },
-      {
-        id: 'r1-2',
-        author: 'Hassan M.',
-        content: "Consider flexible work arrangements if possible. I negotiated a work-from-home day each week which has been invaluable for family time.",
-        date: '1 day ago'
-      }
-    ]
-  },
-  {
-    id: '2',
-    author: 'Yusuf M.',
-    title: "Teaching children about prayer",
-    content: "My son is 4 years old, and I'd like to start introducing him to salah in a way that's engaging and not overwhelming. What approaches have worked for other fathers? I remember my own father was quite strict about it, but I want to foster a love for prayer rather than make it feel like a chore.",
-    date: '5 days ago',
-    category: 'Islamic Education',
-    replies: 15,
-    likes: 23,
-    isLiked: false,
-    replyList: [
-      {
-        id: 'r2-1',
-        author: 'Ahmad S.',
-        content: "I started by making prayer a family activity. We pray together, and I explain each movement in a simple way. Now my daughter looks forward to it!",
-        date: '4 days ago'
-      },
-      {
-        id: 'r2-2',
-        author: 'Khalid R.',
-        content: "Children's prayer mats with Islamic designs helped a lot. Also, letting them lead the family in prayer occasionally gives them a sense of responsibility.",
-        date: '3 days ago'
-      }
-    ]
-  },
-  {
-    id: '3',
-    author: 'Ahmad K.',
-    title: "Dealing with non-Muslim environments",
-    content: "My children attend a public school where they're often the only Muslims in their class. They sometimes come home confused about things they hear that conflict with our Islamic values. How do other fathers handle this situation while building their children's confidence in their identity?",
-    date: '1 week ago',
-    category: 'Cultural Challenges',
-    replies: 21,
-    likes: 34,
-    isLiked: false,
-    replyList: [
-      {
-        id: 'r3-1',
-        author: 'Zainab F.',
-        content: "Regular family discussions about our faith help. We talk about what they learned at school and how it relates to our Islamic values.",
-        date: '6 days ago'
-      },
-      {
-        id: 'r3-2',
-        author: 'Mohammed A.',
-        content: "I've found that connecting with other Muslim families in the area has been crucial. We organize playdates and activities that reinforce our shared values.",
-        date: '5 days ago'
-      }
-    ]
-  },
-];
-
 // Sample upcoming events
-const sampleEvents = [
-  {
-    id: '1',
-    title: "Fatherhood Circle: Monthly Meeting",
-    description: "Join our monthly gathering of Muslim fathers to discuss challenges, share experiences, and support one another in the journey of fatherhood.",
-    date: "April 15, 2025",
-    time: "7:00 PM - 8:30 PM",
-    location: "Masjid Al-Iman Community Hall",
-    category: "Discussion Group"
-  },
-  {
-    id: '2',
-    title: "Father-Child Outdoor Activity Day",
-    description: "A day of outdoor activities designed for fathers and their children to strengthen bonds through play, exploration, and shared experiences.",
-    date: "April 20, 2025",
-    time: "10:00 AM - 2:00 PM",
-    location: "Greenwood Park",
-    category: "Activity"
-  },
-  {
-    id: '3',
-    title: "Workshop: Islamic Financial Planning for Families",
-    description: "Learn about managing family finances in accordance with Islamic principles, including saving for children's education, halal investments, and wealth distribution.",
-    date: "May 5, 2025",
-    time: "6:30 PM - 8:30 PM",
-    location: "Islamic Center Conference Room",
-    category: "Workshop"
-  }
-];
+const sampleEvents = [];
 
 const Community = () => {
   const { toast } = useToast();
-  const [discussions, setDiscussions] = useState<Discussion[]>(sampleDiscussions);
+  const { user } = useAuth();
+  const [discussions, setDiscussions] = useState<Discussion[]>([]);
   const [events, setEvents] = useState(sampleEvents);
+  const [isLoading, setIsLoading] = useState(true);
   
   // New discussion form state
   const [newPost, setNewPost] = useState({
@@ -153,12 +51,160 @@ const Community = () => {
     isAnonymous: false
   });
   
+  const categories = [
+    "Parenting",
+    "Islamic Education",
+    "Work-Life Balance",
+    "Family Life",
+    "Mental Health",
+    "Other"
+  ];
+  
+  // Filter and pagination state
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 5;
+  
   // Reply state
   const [replyContent, setReplyContent] = useState('');
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [isAnonymousReply, setIsAnonymousReply] = useState(false);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Fetch discussions from Supabase
+  useEffect(() => {
+    const fetchDiscussions = async () => {
+      try {
+        setIsLoading(true);
+        
+        // Fetch discussions
+        const { data: discussionsData, error: discussionsError } = await supabase
+          .from('discussions')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (discussionsError) {
+          // Check if the error is due to missing tables
+          if (discussionsError.code === '42P01') {
+            console.log('Database tables not set up yet. Please run the SQL schema in your Supabase project.');
+            // Set empty discussions array instead of showing error
+            setDiscussions([]);
+            return;
+          }
+          throw discussionsError;
+        }
+        
+        // Fetch replies for each discussion
+        const discussionsWithReplies = await Promise.all(
+          discussionsData.map(async (discussion) => {
+            const { data: repliesData, error: repliesError } = await supabase
+              .from('replies')
+              .select('*')
+              .eq('discussion_id', discussion.id)
+              .order('created_at', { ascending: true });
+            
+            if (repliesError) {
+              // If replies table doesn't exist, just continue with empty replies
+              if (repliesError.code === '42P01') {
+                return {
+                  id: discussion.id,
+                  author: discussion.is_anonymous ? 'Anonymous' : discussion.author_name || 'Anonymous',
+                  title: discussion.title,
+                  content: discussion.content,
+                  date: formatDate(discussion.created_at),
+                  category: discussion.category || 'General',
+                  replies: 0,
+                  likes: discussion.likes || 0,
+                  isLiked: false,
+                  replyList: []
+                };
+              }
+              throw repliesError;
+            }
+            
+            // Format the discussion data
+            return {
+              id: discussion.id,
+              author: discussion.is_anonymous ? 'Anonymous' : discussion.author_name || 'Anonymous',
+              title: discussion.title,
+              content: discussion.content,
+              date: formatDate(discussion.created_at),
+              category: discussion.category || 'General',
+              replies: repliesData.length,
+              likes: discussion.likes || 0,
+              isLiked: false, // This would need to be tracked per user
+              replyList: repliesData.map(reply => ({
+                id: reply.id,
+                author: reply.is_anonymous ? 'Anonymous' : reply.author_name || 'Anonymous',
+                content: reply.content,
+                date: formatDate(reply.created_at)
+              }))
+            };
+          })
+        );
+        
+        setDiscussions(discussionsWithReplies);
+      } catch (error) {
+        console.error('Error fetching discussions:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load discussions. Please try again later.",
+          variant: "destructive",
+          duration: 3000,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchDiscussions();
+  }, [toast]);
+  
+  // Helper function to format dates
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) {
+      return 'Just now';
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else if (diffInSeconds < 604800) {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days} day${days > 1 ? 's' : ''} ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
+  };
+  
+  // Filter discussions based on selected category
+  const filteredDiscussions = selectedCategory && selectedCategory !== "all"
+    ? discussions.filter(discussion => discussion.category === selectedCategory)
+    : discussions;
+  
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredDiscussions.length / itemsPerPage);
+  const paginatedDiscussions = filteredDiscussions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+  
+  // Handle category filter change
+  const handleFilterChange = (value: string) => {
+    setSelectedCategory(value);
+    setCurrentPage(1); // Reset to first page when filter changes
+  };
   
   // Handle discussion form change
   const handlePostChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -177,16 +223,51 @@ const Community = () => {
     }
   };
   
+  const handleCategoryChange = (value: string) => {
+    setNewPost(prev => ({
+      ...prev,
+      category: value
+    }));
+  };
+  
   // Handle discussion form submit
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate posting a discussion
-    setTimeout(() => {
+    try {
+      // Insert the discussion into Supabase
+      const { data: discussionData, error: discussionError } = await supabase
+        .from('discussions')
+        .insert({
+          title: newPost.title,
+          content: newPost.content,
+          category: newPost.category || 'General',
+          is_anonymous: newPost.isAnonymous,
+          author_name: newPost.isAnonymous ? null : (user?.user_metadata?.full_name || 'Anonymous'),
+          author_id: user?.id || null,
+          likes: 0
+        })
+        .select();
+      
+      if (discussionError) {
+        // Check if the error is due to missing tables
+        if (discussionError.code === '42P01') {
+          toast({
+            title: "Database Setup Required",
+            description: "The discussions feature is not set up yet. Please contact the administrator.",
+            variant: "destructive",
+            duration: 5000,
+          });
+          return;
+        }
+        throw discussionError;
+      }
+      
+      // Create a new discussion object for the UI
       const newDiscussion: Discussion = {
-        id: `${discussions.length + 1}`,
-        author: newPost.isAnonymous ? 'Anonymous' : 'You',
+        id: discussionData[0].id,
+        author: newPost.isAnonymous ? 'Anonymous' : (user?.user_metadata?.full_name || 'Anonymous'),
         title: newPost.title,
         content: newPost.content,
         date: 'Just now',
@@ -197,7 +278,10 @@ const Community = () => {
         replyList: []
       };
       
-      setDiscussions([newDiscussion, ...discussions]);
+      // Update the discussions state
+      setDiscussions(prevDiscussions => [newDiscussion, ...prevDiscussions]);
+      
+      // Reset the form
       setNewPost({
         title: '',
         category: '',
@@ -205,62 +289,147 @@ const Community = () => {
         isAnonymous: false
       });
       
+      // Show success toast
       toast({
         title: "Post Published",
         description: "Your discussion has been posted to the community.",
         duration: 3000,
       });
-      
+    } catch (error) {
+      console.error('Error posting discussion:', error);
+      toast({
+        title: "Error",
+        description: "There was a problem posting your discussion. Please try again.",
+        variant: "destructive",
+        duration: 3000,
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
   
   // Handle like discussion
-  const handleLike = (id: string) => {
-    setDiscussions(prev => prev.map(discussion => {
-      if (discussion.id === id) {
-        const newLikes = discussion.isLiked ? discussion.likes - 1 : discussion.likes + 1;
-        return {
-          ...discussion,
-          likes: newLikes,
-          isLiked: !discussion.isLiked
-        };
+  const handleLike = async (id: string) => {
+    try {
+      // Find the discussion to get its current likes
+      const discussion = discussions.find(d => d.id === id);
+      if (!discussion) return;
+      
+      const newLikes = discussion.isLiked ? discussion.likes - 1 : discussion.likes + 1;
+      
+      // Update likes in Supabase
+      const { error } = await supabase
+        .from('discussions')
+        .update({ likes: newLikes })
+        .eq('id', id);
+      
+      if (error) {
+        // Check if the error is due to missing tables
+        if (error.code === '42P01') {
+          toast({
+            title: "Database Setup Required",
+            description: "The likes feature is not set up yet. Please contact the administrator.",
+            variant: "destructive",
+            duration: 5000,
+          });
+          return;
+        }
+        throw error;
       }
-      return discussion;
-    }));
+      
+      // Update the local state
+      setDiscussions(prev => prev.map(discussion => {
+        if (discussion.id === id) {
+          return {
+            ...discussion,
+            likes: newLikes,
+            isLiked: !discussion.isLiked
+          };
+        }
+        return discussion;
+      }));
+    } catch (error) {
+      console.error('Error updating likes:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update likes. Please try again.",
+        variant: "destructive",
+        duration: 3000,
+      });
+    }
   };
   
   // Handle reply submission
-  const handleReplySubmit = (discussionId: string) => {
+  const handleReplySubmit = async (discussionId: string) => {
     if (!replyContent.trim()) return;
     
-    setDiscussions(prev => prev.map(discussion => {
-      if (discussion.id === discussionId) {
-        const newReply: Reply = {
-          id: `reply-${Date.now()}`,
-          author: isAnonymousReply ? 'Anonymous' : 'You',
+    try {
+      // Insert the reply into Supabase
+      const { data: replyData, error: replyError } = await supabase
+        .from('replies')
+        .insert({
+          discussion_id: discussionId,
           content: replyContent,
-          date: 'Just now'
-        };
-        
-        return {
-          ...discussion,
-          replies: discussion.replies + 1,
-          replyList: [...discussion.replyList, newReply]
-        };
+          is_anonymous: isAnonymousReply,
+          author_name: isAnonymousReply ? null : (user?.user_metadata?.full_name || 'Anonymous'),
+          author_id: user?.id || null
+        })
+        .select();
+      
+      if (replyError) {
+        // Check if the error is due to missing tables
+        if (replyError.code === '42P01') {
+          toast({
+            title: "Database Setup Required",
+            description: "The replies feature is not set up yet. Please contact the administrator.",
+            variant: "destructive",
+            duration: 5000,
+          });
+          return;
+        }
+        throw replyError;
       }
-      return discussion;
-    }));
-    
-    setReplyContent('');
-    setReplyingTo(null);
-    setIsAnonymousReply(false);
-    
-    toast({
-      title: "Reply Posted",
-      description: "Your reply has been added to the discussion.",
-      duration: 3000,
-    });
+      
+      // Create a new reply object for the UI
+      const newReply: Reply = {
+        id: replyData[0].id,
+        author: isAnonymousReply ? 'Anonymous' : (user?.user_metadata?.full_name || 'Anonymous'),
+        content: replyContent,
+        date: 'Just now'
+      };
+      
+      // Update the discussions state
+      setDiscussions(prev => prev.map(discussion => {
+        if (discussion.id === discussionId) {
+          return {
+            ...discussion,
+            replies: discussion.replies + 1,
+            replyList: [...discussion.replyList, newReply]
+          };
+        }
+        return discussion;
+      }));
+      
+      // Reset the reply form
+      setReplyContent('');
+      setReplyingTo(null);
+      setIsAnonymousReply(false);
+      
+      // Show success toast
+      toast({
+        title: "Reply Posted",
+        description: "Your reply has been added to the discussion.",
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('Error posting reply:', error);
+      toast({
+        title: "Error",
+        description: "There was a problem posting your reply. Please try again.",
+        variant: "destructive",
+        duration: 3000,
+      });
+    }
   };
   
   // Handle register for event
@@ -334,13 +503,18 @@ const Community = () => {
                           
                           <div>
                             <label htmlFor="category" className="block text-sm font-medium mb-1">Category</label>
-                            <Input
-                              id="category"
-                              name="category"
-                              placeholder="e.g., Parenting, Education, Faith"
-                              value={newPost.category}
-                              onChange={handlePostChange}
-                            />
+                            <Select value={newPost.category} onValueChange={handleCategoryChange}>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select a category" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {categories.map((category) => (
+                                  <SelectItem key={category} value={category}>
+                                    {category}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                           </div>
                           
                           <div>
@@ -363,7 +537,7 @@ const Community = () => {
                               name="isAnonymous"
                               checked={newPost.isAnonymous}
                               onChange={handlePostChange}
-                              className="rounded border-gray-300 text-islamic-green focus:ring-islamic-green"
+                              className="h-2.5 w-2.5 rounded border-gray-300 text-islamic-green focus:ring-islamic-green"
                             />
                             <label htmlFor="isAnonymous" className="text-sm text-gray-600">
                               Post anonymously
@@ -413,21 +587,99 @@ const Community = () => {
                   
                   {/* Right Column - Discussions List */}
                   <div className="md:col-span-2">
-                    <h2 className="text-2xl font-bold mb-6 text-islamic-green">Recent Discussions</h2>
+                    <div className="flex justify-between items-center mb-6">
+                      <h2 className="text-2xl font-bold text-islamic-green">Recent Discussions</h2>
+                      {discussions.length > 0 && (
+                        <div className="flex items-center space-x-2">
+                          <Filter className="h-4 w-4 text-gray-500" />
+                          <Select value={selectedCategory} onValueChange={handleFilterChange}>
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Filter by category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Categories</SelectItem>
+                              {categories.map((category) => (
+                                <SelectItem key={category} value={category}>
+                                  {category}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+                    </div>
                     
                     <div className="space-y-6">
-                      {discussions.map((discussion) => (
-                        <DiscussionCard 
-                          key={discussion.id} 
-                          discussion={discussion} 
-                          onLike={() => handleLike(discussion.id)}
-                          replyContent={replyContent}
-                          setReplyContent={setReplyContent}
-                          isAnonymousReply={isAnonymousReply}
-                          setIsAnonymousReply={setIsAnonymousReply}
-                          handleReplySubmit={handleReplySubmit}
-                        />
-                      ))}
+                      {isLoading ? (
+                        <Card>
+                          <CardContent className="py-8 text-center">
+                            <p className="text-gray-600">Loading discussions...</p>
+                          </CardContent>
+                        </Card>
+                      ) : discussions.length === 0 ? (
+                        <Card>
+                          <CardContent className="py-8 text-center">
+                            <p className="text-gray-600">
+                              Be the first to start a discussion! Share your experiences, ask questions, or seek advice from other Muslim fathers. Your insights could help someone else on their journey.
+                            </p>
+                          </CardContent>
+                        </Card>
+                      ) : (
+                        <>
+                          <Card>
+                            <CardContent className="py-4">
+                              <p className="text-gray-600 text-center">
+                                Join the conversation! Share your thoughts, experiences, and advice. Together, we can support and learn from each other in our journey of fatherhood.
+                              </p>
+                            </CardContent>
+                          </Card>
+                          {paginatedDiscussions.map((discussion) => (
+                            <DiscussionCard 
+                              key={discussion.id} 
+                              discussion={discussion} 
+                              onLike={() => handleLike(discussion.id)}
+                              replyContent={replyContent}
+                              setReplyContent={setReplyContent}
+                              isAnonymousReply={isAnonymousReply}
+                              setIsAnonymousReply={setIsAnonymousReply}
+                              handleReplySubmit={handleReplySubmit}
+                            />
+                          ))}
+                          
+                          {/* Pagination */}
+                          {totalPages > 1 && (
+                            <div className="flex justify-center mt-6 space-x-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                              >
+                                Previous
+                              </Button>
+                              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                <Button
+                                  key={page}
+                                  variant={currentPage === page ? "default" : "outline"}
+                                  size="sm"
+                                  onClick={() => handlePageChange(page)}
+                                  className={currentPage === page ? "bg-islamic-green" : ""}
+                                >
+                                  {page}
+                                </Button>
+                              ))}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                              >
+                                Next
+                              </Button>
+                            </div>
+                          )}
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -441,123 +693,35 @@ const Community = () => {
                       <CardHeader>
                         <CardTitle className="text-islamic-green">Community Events</CardTitle>
                         <CardDescription>
-                          Connect with other Muslim fathers in person through our regular events
+                          Connect with other Muslim fathers through our regular in-person and online events
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-4">
-                        <p>
+                        <p className="text-gray-600">
+                          Want to register your event? Email us at{' '}
+                          <a href="mailto:info@TheModernMuslimDad.co.uk" className="text-islamic-green hover:text-islamic-teal">
+                            info@TheModernMuslimDad.co.uk
+                          </a>
+                        </p>
+                        <p className="text-sm text-gray-500">
                           Our community events provide opportunities to build brotherhood, learn from each other, and create meaningful connections with other Muslim fathers.
                         </p>
-                        
-                        <div className="space-y-2">
-                          <h4 className="font-medium text-islamic-teal">Why Attend?</h4>
-                          <ul className="list-disc pl-5 text-sm space-y-1">
-                            <li>Build relationships with like-minded fathers</li>
-                            <li>Share experiences and learn from others</li>
-                            <li>Find support for common challenges</li>
-                            <li>Strengthen your parenting with Islamic principles</li>
-                            <li>Create positive memories with your children</li>
-                          </ul>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <h4 className="font-medium text-islamic-teal">Suggest an Event</h4>
-                          <p className="text-sm">
-                            Have an idea for a community event? Email us at events@imanjourney.com with your suggestion.
-                          </p>
-                        </div>
                       </CardContent>
-                      <CardFooter>
-                        <Button className="w-full bg-islamic-green">
-                          Subscribe to Event Updates
-                        </Button>
-                      </CardFooter>
                     </Card>
                   </div>
                   
                   {/* Right Column - Events List */}
                   <div className="md:col-span-2">
                     <h2 className="text-2xl font-bold mb-6 text-islamic-green">Upcoming Events</h2>
-                    
-                    <div className="space-y-6">
-                      {events.map((event) => (
-                        <EventCard 
-                          key={event.id} 
-                          event={event} 
-                          onRegister={() => handleRegisterEvent(event.id)} 
-                        />
-                      ))}
+                    <div className="text-center py-8">
+                      <p className="text-gray-600">
+                        No upcoming events at the moment. Check back soon for new events!
+                      </p>
                     </div>
                   </div>
                 </div>
               </TabsContent>
             </Tabs>
-          </div>
-        </section>
-        
-        {/* Testimonials Section */}
-        <section className="py-12 bg-islamic-cream">
-          <div className="container-app">
-            <h2 className="text-2xl font-bold mb-8 text-islamic-green text-center">Community Testimonials</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="bg-white">
-                <CardContent className="pt-6">
-                  <div className="mb-4">
-                    <p className="italic text-gray-700">
-                      "This community has been a lifeline for me as a new father. The advice from other Muslim dads helped me navigate those challenging first months with confidence and Islamic guidance."
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-islamic-teal flex items-center justify-center mr-3">
-                      <span className="text-white font-medium">SA</span>
-                    </div>
-                    <div>
-                      <p className="font-medium">Sami A.</p>
-                      <p className="text-sm text-gray-500">Father of 2</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-white">
-                <CardContent className="pt-6">
-                  <div className="mb-4">
-                    <p className="italic text-gray-700">
-                      "The father-child events organized by this community have created beautiful memories for me and my son. It's wonderful to see him connect with other Muslim children while I build brotherhood with their fathers."
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-islamic-green flex items-center justify-center mr-3">
-                      <span className="text-white font-medium">MT</span>
-                    </div>
-                    <div>
-                      <p className="font-medium">Mohammed T.</p>
-                      <p className="text-sm text-gray-500">Father of 1</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-white">
-                <CardContent className="pt-6">
-                  <div className="mb-4">
-                    <p className="italic text-gray-700">
-                      "As a convert, I had so many questions about raising my children with Islamic values. The discussions and resources from this community provided me with knowledge, support, and confidence."
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-islamic-blue flex items-center justify-center mr-3">
-                      <span className="text-white font-medium">JK</span>
-                    </div>
-                    <div>
-                      <p className="font-medium">James K.</p>
-                      <p className="text-sm text-gray-500">Father of 3</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </div>
         </section>
       </main>
@@ -662,7 +826,7 @@ const DiscussionCard = ({
                   id={`anonymous-reply-${discussion.id}`}
                   checked={isAnonymousReply}
                   onChange={(e) => setIsAnonymousReply(e.target.checked)}
-                  className="rounded border-gray-300 text-islamic-green focus:ring-islamic-green"
+                  className="h-2.5 w-2.5 rounded border-gray-300 text-islamic-green focus:ring-islamic-green"
                 />
                 <label htmlFor={`anonymous-reply-${discussion.id}`} className="text-sm text-gray-600">
                   Reply anonymously
@@ -698,60 +862,27 @@ const DiscussionCard = ({
             </div>
           </div>
         )}
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <div className="flex items-center space-x-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onLike}
-            className={`flex items-center ${discussion.isLiked ? 'text-red-500' : 'text-gray-500'}`}
-          >
-            <Heart className={`h-4 w-4 mr-1 ${discussion.isLiked ? 'fill-current' : ''}`} />
-            <span>{discussion.likes}</span>
-          </Button>
-          
-          <div className="flex items-center text-gray-500">
-            <MessageSquare className="h-4 w-4 mr-1" />
-            <span>{discussion.replies} replies</span>
-          </div>
-        </div>
         
-        <Button 
-          variant="outline" 
-          size="sm"
-          onClick={() => setShowReplyForm(!showReplyForm)}
-        >
-          {showReplyForm ? 'Cancel Reply' : 'Reply'}
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-};
-
-// Event Card Component
-const EventCard = ({ event, onRegister }: { event: any; onRegister: () => void }) => {
-  return (
-    <Card className="overflow-hidden">
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-start">
-          <Badge category={event.category} />
-          <div className="flex flex-col items-end">
-            <p className="text-sm font-medium text-islamic-green">{event.date}</p>
-            <p className="text-xs text-gray-500">{event.time}</p>
+        {/* Action Buttons */}
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={onLike}
+              className="flex items-center space-x-1 text-gray-500 hover:text-islamic-green"
+            >
+              <Heart className="h-4 w-4" />
+              <span className="text-sm">{discussion.likes}</span>
+            </button>
+            <button
+              onClick={() => setShowReplyForm(!showReplyForm)}
+              className="flex items-center space-x-1 text-gray-500 hover:text-islamic-green"
+            >
+              <MessageSquare className="h-4 w-4" />
+              <span className="text-sm">Reply</span>
+            </button>
           </div>
         </div>
-        <CardTitle className="text-islamic-green">{event.title}</CardTitle>
-        <CardDescription>{event.location}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>{event.description}</p>
       </CardContent>
-      <CardFooter className="flex justify-end">
-        <Button onClick={onRegister} className="bg-islamic-green">
-          Register
-        </Button>
-      </CardFooter>
     </Card>
   );
 };
@@ -759,19 +890,17 @@ const EventCard = ({ event, onRegister }: { event: any; onRegister: () => void }
 // Badge Component
 const Badge = ({ category }: { category: string }) => {
   const getColor = () => {
-    switch (category.toLowerCase()) {
-      case 'islamic education':
-      case 'workshop':
-        return 'bg-islamic-teal/10 text-islamic-teal';
-      case 'work-life balance':
-      case 'discussion group':
-        return 'bg-islamic-green/10 text-islamic-green';
-      case 'cultural challenges':
-      case 'activity':
-        return 'bg-islamic-blue/10 text-islamic-blue';
-      case 'parenting':
-      case 'support':
-        return 'bg-islamic-gold/10 text-islamic-gold';
+    switch (category) {
+      case 'Parenting':
+        return 'bg-blue-100 text-blue-800';
+      case 'Islamic Education':
+        return 'bg-green-100 text-green-800';
+      case 'Work-Life Balance':
+        return 'bg-purple-100 text-purple-800';
+      case 'Family Life':
+        return 'bg-pink-100 text-pink-800';
+      case 'Mental Health':
+        return 'bg-yellow-100 text-yellow-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
