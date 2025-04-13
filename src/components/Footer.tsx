@@ -47,7 +47,7 @@ const Footer = () => {
         
         <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-islamic-sand/30 text-center">
           <p className="text-xs sm:text-sm text-islamic-green/60">
-            &copy; {new Date().getFullYear()} Fatherhood Journey. All rights reserved.
+            &copy; {new Date().getFullYear()} The Modern Muslim Dad. All rights reserved.
           </p>
         </div>
       </div>

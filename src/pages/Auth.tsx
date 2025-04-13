@@ -3,10 +3,10 @@ import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '../context/AuthContext';
+import { BrandLogo } from '@/components/BrandLogo';
 import {
   Form,
   FormControl,
@@ -96,14 +96,8 @@ const Auth = () => {
       <header className="bg-white shadow-sm">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-islamic-green flex items-center justify-center">
-                <Heart className="h-5 w-5 text-islamic-cream" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-islamic-green">Fatherhood Journey</h1>
-                <p className="text-xs text-islamic-teal">For Muslim Fathers</p>
-              </div>
+            <Link to="/">
+              <BrandLogo size="md" />
             </Link>
           </div>
         </div>
@@ -171,7 +165,14 @@ const Auth = () => {
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} />
+                        <Input 
+                          placeholder="John Doe" 
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            console.log('Full name changed:', e.target.value);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -226,9 +227,12 @@ const Auth = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white py-4 border-t">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} Fatherhood Journey. All rights reserved.
+      <footer className="bg-gray-50 py-6 border-t border-gray-200">
+        <div className="container mx-auto px-4 text-center">
+          <BrandLogo size="sm" showText={false} />
+          <p className="mt-2 text-xs text-gray-500">
+            &copy; {new Date().getFullYear()} The Modern Muslim Dad. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>

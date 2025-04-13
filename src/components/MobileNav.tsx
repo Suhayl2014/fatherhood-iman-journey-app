@@ -6,8 +6,8 @@ import { cn } from '@/lib/utils';
 const MobileNav = () => {
   const location = useLocation();
   
-  // Don't show mobile nav on landing page
-  if (location.pathname === '/') {
+  // Don't show mobile nav on landing page or auth pages
+  if (location.pathname === '/' || location.pathname === '/auth' || location.pathname.startsWith('/auth?')) {
     return null;
   }
   
