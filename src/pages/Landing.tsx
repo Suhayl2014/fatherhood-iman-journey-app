@@ -180,7 +180,7 @@ const Landing = () => {
             <div className="max-w-2xl mx-auto">
               <h2 className="text-3xl font-bold mb-4">Join Our Exclusive Waitlist</h2>
               <p className="text-lg text-islamic-sand mb-8">
-                Be among the first to experience Fatherhood Iman Journey when we launch. Get early access and special benefits.
+                Be among the first to experience The Modern Muslim Dad when we launch. Get early access and special benefits.
               </p>
               <WaitlistForm />
             </div>
